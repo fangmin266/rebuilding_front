@@ -1,17 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import './css/Admin.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './screens/mobile/Home';
+import Home from './screens/admin/pages/Home';
+import Layout from './common/Layout';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        
-        {/* <Route path="/home" element={<}/> */}
-        <Route path='/' element={<Home/>} />
-      </Routes>
+      <Layout>
+        <Routes>
+            <Route path='/' element={<Home/>} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }

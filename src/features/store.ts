@@ -3,10 +3,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
-import commonSlice from "./mobile/commonSlice";
+import commonSlice from "./admin/commonSlice";
 const reducers = combineReducers({
-  //app
-  appcommon: commonSlice
+  //admin
+  admincommon: commonSlice
 })
 const persistConfig = {
   key: "root",
