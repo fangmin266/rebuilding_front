@@ -70,7 +70,7 @@ const Home = () => {
   const RealTimeLankingTab = () =>{
     const tabs = ["펀딩/프리오더","스토어"]
     return(
-      <ul className='text-gray-400 text-sm flex gap-x-4 cursor-pointer py-3'>
+      <ul className='text-gray-400 text-sm flex gap-x-4 cursor-pointer py-6'>
         {tabs?.map((el)=>
           (<li className={tabName===el?'text-black border-b border-black':''} onClick={()=>{setTabname(el)}}>{el}</li>))
         }
@@ -80,18 +80,27 @@ const Home = () => {
   const RealTimeLists = (TAB:string) =>{
     const lists = TAB ==='펀딩/프리오더'? HomeRealTimeDummy1:HomeRealTimeDummy2
     return(
-      <ul className='flex flex-col gap-y-3'>
+      <ul className='flex flex-col gap-y-3 '>
         {lists?.map((el,idx)=>(
           <li key={idx} className='flex justify-between'>
-            <div className='flex gap-x-2 w-2/3'>
-              <span className='font-bold text-lg'>{idx+1}</span>
-              <div className='text-sm tracking-wide pt-1'>
-                <span className='pr-3'>{el?.title}</span>
+            <div className='w-2/3'>
+              <div className='flex gpa-x-2'>
+                <span className='font-bold text-lg'>{idx+1}</span>
+                <div className='text-sm tracking-wide pt-1'>
+                  <span className='pr-3'>{el?.title}</span>
+                </div>
+              </div>
+              <div>
+                <span className='text-green-400 font-semibold'>
+                  {el?.count?el?.count?.toLocaleString('ko-KR'):el?.percentage ?el.percentage.toLocaleString('ko-KR'):el?.price?.toLocaleString('ko-KR')}
+                  {el.unit}
+                </span>
+                <span className='inline-block px-2 text-sm font-bold tracking-tight'>{el.score}</span>
                 {el?.freedel&&<span className=' rounded-sm text-xs text-white bg-gray-400 mr-1'>무배</span>}
-                {el?.quick&&<span className='border rounded-sm text-xs text-gray-400'>퀵배</span>}
+                  {el?.quick&&<span className='border rounded-sm text-xs text-gray-400'>퀵배</span>}
               </div>
             </div>
-            <div className='w-16 h-16 bg-gray-100'></div>
+            <div className='w-24 h-16 bg-gray-100'></div>
           </li>
         ))}
       </ul>
@@ -103,8 +112,8 @@ const Home = () => {
     <Header/>
     <div className='home_content'>
       <div className='bg-gray-100 h-[300px] flex justify-center items-center'>swiper</div>
-      <div className='content1 px-20 py-10  mx-auto 2xl:w-100 flex gap-x-20'>
-        <div className='w-2/3'>
+      <div className='content1 px-20  mx-auto 2xl:w-100 flex gap-x-20'>
+        <div className='w-2/3 py-10'>
           <ContentHead1 title="취향 맞춤 프로젝트" subtitle="지금 함께 만드는 성공" option ={1}/>
           <ul className='grid grid-cols-3 gap-x-8'>
             {categorySection(aiNum===1?HomeCategoryDummy1:aiNum===2?HomeCategoryDummy2:HomeCategoryDummy3)}
@@ -114,7 +123,7 @@ const Home = () => {
             {aiRecommentBtn()}
           </div>
         </div>
-        <div className='w-1/3'>
+        <div className='w-1/3 py-10 border-l border-gray-100 pl-20'>
           <ContentHead1 title="실시간 랭킹" subtitle={""} option ={2}/>
           <div>
             {RealTimeLankingTab()}

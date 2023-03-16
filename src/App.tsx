@@ -5,6 +5,7 @@ import Home from './screens/admin/pages/Home';
 import Layout from './common/Layout';
 import Login from './screens/admin/pages/Login';
 import Signup from './screens/admin/pages/Signup';
+import AccoutFind from './screens/admin/pages/AccoutFind';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path='/' element={<Home/>} />
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
+            <Route path='/accountfind' element={<AccoutFind/>} />
         </Routes>
       </Layout>
     </BrowserRouter>

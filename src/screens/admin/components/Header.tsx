@@ -23,13 +23,18 @@ export const reapeateList = (option:number) =>{
     </>
   )
 }
-export const Header = () => {
 
+export const Logo = () =>{
+  return(
+    <h1 className='logo font-bold text-2xl'>
+      <a href='/'>mindiz</a>
+    </h1>
+  )
+}
+export const Header = () => {
   return (
     <header className="header-wrapper w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white">
-      <h1 className='logo font-bold text-2xl'>
-        <a href='/'>mindiz</a>
-      </h1>
+      <Logo />
       <ul className='GNBdesktop flex gap-x-4 font-semibold text-lg'>
         {reapeateList(1)}
       </ul>
@@ -42,7 +47,7 @@ export const Header = () => {
       <div className='home_login'>
         <ul className='logindesktop flex gap-x-4 items-center'>
           {reapeateList(2)}
-          <button className='text-green-400 border border-green-400 rounded py-1.5 px-4'>프로젝트 만들기</button>
+          <button className='text-green-400 border border-green-400 rounded py-2 px-4 text-sm'>프로젝트 만들기</button>
         </ul>
       </div>
     </header>
@@ -52,10 +57,8 @@ export const Header = () => {
 export const Header2 = () => {
   return (
     <header className="header-wrapper w-full flex items-center mx-auto 2xl:w-100 px-20 py-3 justify-between bg-white border-b border-gray-100">
-      <div></div>
-      <h1 className='logo font-bold text-2xl'>
-        <a href='/'>mindiz</a>
-      </h1>
+      <div className='w-[112.9px]'></div>
+      <Logo />
       <ul className='flex gap-x-4 items-center'>
         {reapeateList(2)}
       </ul>

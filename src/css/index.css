@@ -21,6 +21,12 @@ ul,li,ol{
   list-style:none;
   padding-left:0px;
   }
+
+input {
+  width: 100%;
+  padding: 12px;
+  border:1px solid #efefef;
+}
 /* width */
 .maxW-1440{
   max-width: 1440px;
@@ -36,3 +42,10 @@ ul,li,ol{
 .transformXY-50{
   transform:translate(-50%,-50%)
 }
+
+@media only screen and (min-width: 429px) {
+  .maxW {
+    width: 375px;
+  }
+}
+
