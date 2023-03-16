@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IHomeCategoryDummy,HomeCategoryDummy1,HomeCategoryDummy2,HomeCategoryDummy3, HomeRealTimeDummy1, HomeRealTimeDummy2 } from '../../../common/dummyDatas/HomeDummy';
 import { ContentHead1 } from '../components/ContentHead';
 import Footer from '../components/Footer';
-import Header from '../components/Header';
+import { Header } from '../components/Header';
 
 const Home = () => {
   const [event,setEvent] = useState(true)
@@ -29,8 +29,8 @@ const Home = () => {
       <>
         {HomeCategoryDummy1?.map((el)=>(
           <li className='pt-4'>
-            <div className='h-[150px] bg-gray-100'></div>
-            <div className='pt-2'>{el.title}</div>
+            <div className='h-[100px] bg-gray-100'></div>
+            <div className='pt-2 '>{el.title}</div>
             <div className='flex items-center gap-x-1'>
               <span className='text-green-400'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
               <span className='text-gray-400 text-xs'>{el.category}</span>
@@ -43,7 +43,7 @@ const Home = () => {
   const specialExhibition = () =>{
     return(
       <li className='pt-4 col-span-2'>
-        <div className='h-[150px] bg-gray-100'></div>
+        <div className='h-[100px] bg-gray-100'></div>
         <div className='flex gap-x-2 pt-2'>
           <span className='border rounded-sm text-xs flex items-center'>기획전</span>
           <p>오직 와디즈에서만! 앵콜프로젝트 모음</p>
@@ -102,11 +102,11 @@ const Home = () => {
     {eventCoupon()}
     <Header/>
     <div className='home_content'>
-      <div className='bg-gray-100 h-[350px] flex justify-center items-center'>swiper</div>
+      <div className='bg-gray-100 h-[300px] flex justify-center items-center'>swiper</div>
       <div className='content1 px-20 py-10  mx-auto 2xl:w-100 flex gap-x-20'>
         <div className='w-2/3'>
           <ContentHead1 title="취향 맞춤 프로젝트" subtitle="지금 함께 만드는 성공" option ={1}/>
-          <ul className='grid grid-cols-3 gap-x-6'>
+          <ul className='grid grid-cols-3 gap-x-8'>
             {categorySection(aiNum===1?HomeCategoryDummy1:aiNum===2?HomeCategoryDummy2:HomeCategoryDummy3)}
             {specialExhibition()}
           </ul>

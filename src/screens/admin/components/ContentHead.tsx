@@ -10,9 +10,9 @@ export const ContentHead1 = ({title,subtitle,option}:titleProps) =>{
     return(
     <div className='flex justify-between items-end'>
       <div>
-        <h2 className='font-semibold text-2xl tracking-tight leading-6'>{title}</h2>
+        <h2 className='font-bold text-3xl tracking-tight leading-6'>{title}</h2>
         {option===1&&
-         <span className='text-[#878787] text-xs'>{subtitle}</span>  
+         <span className='text-[#878787] text-sm'>{subtitle}</span>  
         }
       </div>
       {option===1&&
