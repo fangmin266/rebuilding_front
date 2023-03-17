@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/wadizclone/static/css/main.aebb4ee1.css",
+    "main.js": "/wadizclone/static/js/main.d8dc0b4e.js",
+    "index.html": "/wadizclone/index.html",
+    "main.aebb4ee1.css.map": "/wadizclone/static/css/main.aebb4ee1.css.map",
+    "main.d8dc0b4e.js.map": "/wadizclone/static/js/main.d8dc0b4e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aebb4ee1.css",
+    "static/js/main.d8dc0b4e.js"
+  ]
+}
