@@ -5,6 +5,7 @@ import { Header2 } from '../components/Header'
 import { Head2 } from '../components/HeadTitle';
 
 import { InputDefault } from '../components/Input';
+import SocialLoginBtn from '../components/SocialLoginBtn';
 
 interface LoginState {
   email:string ;
@@ -27,7 +28,6 @@ const Login = () => {
     setLogin({...login, [name]:value})
   }
 
-  const social = ['구글','페북','애플']
   return (
     <>
       <Header2/>
@@ -43,14 +43,8 @@ const Login = () => {
           </div>
           <ButtonDefault title="로그인" bgcolor='bg-[#1ecfd9]' txtcolor='text-white'/>
         </form>
-        <div className='flex flex-col gap-y-3 pt-3'>
-          <ButtonDefault title='카카오로 시작하기' bgcolor='bg-[#fae225]' txtcolor='text-black'/>
-          <ButtonDefault title='네이버로 시작하기' bgcolor='bg-[#00d337]' txtcolor='text-white'/>
-        </div>
-        <div className='w-full flex justify-center gap-x-3 pt-12'>
-          {social?.map((el)=>(<span className='block border rounded-full p-3' key={el}>{el}</span>))}
-        </div>
-        <div className='text-sm w-full flex justify-center p-8'>아직 와디즈 계정이 없나요? <a className='cursor-pointer inline-block pl-2 text-green-400 underline'>회원가입</a></div>
+        <SocialLoginBtn/>
+        <div className='text-sm w-full flex justify-center p-8'>아직 와디즈 계정이 없나요? <a className='cursor-pointer inline-block pl-2 text-green-400 underline' href='/signup'>회원가입</a></div>
       </div>
     </>
 
