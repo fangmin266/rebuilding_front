@@ -40,14 +40,14 @@ export const Header = () => {
       </ul>
       <div className="home_search relative">
         <input
-        className='border rounded-md border-green-300 px-3 py-2 text-sm w-[300px]'
+        className='border rounded-md border-primary_100 px-3 py-2 text-sm w-[300px]'
         placeholder='새로운 것을 찾으시나요?'/>
         <span className='absolute top-1/2 right-3 transformY-50'>돋보기</span>
       </div>
       <div className='home_login'>
         <ul className='logindesktop flex gap-x-4 items-center'>
           {reapeateList(2)}
-          <button className='text-green-400 border border-green-400 rounded py-2 px-4 text-sm'>프로젝트 만들기</button>
+          <button className='text-primary_100 border border-primary_100 rounded py-2 px-4 text-sm'>프로젝트 만들기</button>
         </ul>
       </div>
     </header>

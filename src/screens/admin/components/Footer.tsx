@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { lists1, lists2, MainLink } from '../staticLists/FooterLists'
+import { lists1,lists2,MainLink,SubLink } from '../staticLists/FooterLists'
 import { useNavigate } from 'react-router-dom'
 const Footer = () => {
  const [open,setOpen] = useState(false)
@@ -25,7 +25,7 @@ const Footer = () => {
                     onClick={()=>setOpen(false)}></div>
                     <ul className='drop-shadow-lg rounded-lg p-4 bg-white flex flex-col gap-y-2 absolute top-1/2 left-1/2 transformXY-50 z-10 min-w-[200px] '>
                         {clickOne?.subLists&&
-                            clickOne.subLists.map((subel)=>(
+                            clickOne.subLists.map((subel:SubLink)=>(
                             <li key={subel.subname} className="cursor-pointer">
                                 <a href={subel.link}>{subel.subname}</a>
                                 <span>{subel.icon}</span>

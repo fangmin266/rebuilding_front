@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IHomeCategoryDummy,HomeCategoryDummy1,HomeCategoryDummy2,HomeCategoryDummy3, HomeRealTimeDummy1, HomeRealTimeDummy2 } from '../../../common/dummyDatas/HomeDummy';
 import { ContentHead1 } from '../components/ContentHead';
 import Footer from '../components/Footer';
+
 import { Header } from '../components/Header';
 
 const Home = () => {
@@ -14,7 +15,7 @@ const Home = () => {
       {event&&
         <div className='p-3 bg-black text-white flex justify-center gap-x-6'>
           <div>
-            <span className='text-green-300'>[첫 결제 65,000원]</span>
+            <span className='text-primary_100'>[첫 결제 65,000원]</span>
             <span>쿠폰 혜택 받고 사라져요</span>
           </div>
           <span className='border cursor-pointer'onClick={()=>setEvent(false)}>닫기</span>
@@ -32,7 +33,7 @@ const Home = () => {
             <div className='h-[100px] bg-gray-100'></div>
             <div className='pt-2 '>{el.title}</div>
             <div className='flex items-center gap-x-1'>
-              <span className='text-green-400'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
+              <span className='text-primary_100'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
               <span className='text-gray-400 text-xs'>{el.category}</span>
             </div>
           </li>
@@ -60,9 +61,9 @@ const Home = () => {
         else setAiNum(aiNum+1)
       }}>
         <span>#</span>
-        <span className='text-green-400'>AI</span>
+        <span className='text-primary_100'>AI</span>
         <span>추천 더보기 </span>
-        <span className='text-xs text-green-400'>{aiNum}</span>
+        <span className='text-xs text-primary_100'>{aiNum}</span>
         <span className='text-xs'>/3</span>
       </div>
     )
@@ -91,7 +92,7 @@ const Home = () => {
                 </div>
               </div>
               <div>
-                <span className='text-green-400 font-semibold'>
+                <span className='text-primary_100 font-semibold'>
                   {el?.count?el?.count?.toLocaleString('ko-KR'):el?.percentage ?el.percentage.toLocaleString('ko-KR'):el?.price?.toLocaleString('ko-KR')}
                   {el.unit}
                 </span>

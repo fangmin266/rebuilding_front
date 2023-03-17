@@ -44,7 +44,7 @@ const Login = () => {
           <ButtonDefault title="로그인" bgcolor='bg-[#1ecfd9]' txtcolor='text-white'/>
         </form>
         <SocialLoginBtn/>
-        <div className='text-sm w-full flex justify-center p-8'>아직 와디즈 계정이 없나요? <a className='cursor-pointer inline-block pl-2 text-green-400 underline' href='/signup'>회원가입</a></div>
+        <div className='text-sm w-full flex justify-center p-8'>아직 와디즈 계정이 없나요? <a className='cursor-pointer inline-block pl-2 text-primary_100 underline' href='/signup'>회원가입</a></div>
       </div>
     </>
 

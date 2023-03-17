@@ -22,11 +22,12 @@ ul,li,ol{
   padding-left:0px;
   }
 
-input {
+input[type='text'], input[type='password'], input[type='email'] {
   width: 100%;
   padding: 12px;
   border:1px solid #efefef;
 }
+
 /* width */
 .maxW-1440{
   max-width: 1440px;
