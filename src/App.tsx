@@ -6,6 +6,7 @@ import Layout from './common/Layout';
 import Login from './screens/admin/pages/Login';
 import Signup from './screens/admin/pages/Signup';
 import AccoutFind from './screens/admin/pages/AccoutFind';
+import Intro from './screens/admin/pages/studio/Intro';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
             <Route path='/accountfind' element={<AccoutFind/>} />
+            {/* studio */}
+            <Route path='/studio/intro' element={<Intro/>} /> 
         </Routes>
       </Layout>
     </BrowserRouter>

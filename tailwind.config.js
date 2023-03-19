@@ -12,6 +12,9 @@ module.exports = {
       backgroundColor:{
         primary_100:"#1ecfd9",
         // primary_60:""
+      },
+      maxWidth: {
+        'layout': '1440px',
       }
     },
   },

@@ -40,8 +40,8 @@ const AccoutFind = () => {
                     <InputDefault InType='email' Inplaceholder='이메일 계정' InonChangeFunction={onChangeEmail} InName='email' InValue={emailInput}/>
                     <div className='h-6'></div>
                     {onTab==='아이디 찾기'?
-                      <ButtonDefault title="확인" bgcolor='bg-[#1ecfd9]' txtcolor='text-white'/>
-                      :<ButtonDefault title="링크 발송" bgcolor='bg-[#1ecfd9]' txtcolor='text-white'/>
+                      <ButtonDefault title="확인" bgcolor='bg-primary_100' txtcolor='text-white'/>
+                      :<ButtonDefault title="링크 발송" bgcolor='bg-primary_100' txtcolor='text-white'/>
                     }
      
                 </div>

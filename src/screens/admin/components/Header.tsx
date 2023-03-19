@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import ProjectMadeModal from '../pages/components/Home/ProjectMadeModal';
 export interface Link {
   name:string; link: string;
 }
@@ -32,25 +33,29 @@ export const Logo = () =>{
   )
 }
 export const Header = () => {
+  const [madeModal,setMadeModal] = useState(false)
   return (
-    <header className="header-wrapper w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white">
-      <Logo />
-      <ul className='GNBdesktop flex gap-x-4 font-semibold text-lg'>
-        {reapeateList(1)}
-      </ul>
-      <div className="home_search relative">
-        <input
-        className='border rounded-md border-primary_100 px-3 py-2 text-sm w-[300px]'
-        placeholder='새로운 것을 찾으시나요?'/>
-        <span className='absolute top-1/2 right-3 transformY-50'>돋보기</span>
-      </div>
-      <div className='home_login'>
-        <ul className='logindesktop flex gap-x-4 items-center'>
-          {reapeateList(2)}
-          <button className='text-primary_100 border border-primary_100 rounded py-2 px-4 text-sm'>프로젝트 만들기</button>
+      <header className="header-wrapper max-w-layout w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white relative">
+        <Logo />
+        <ul className='GNBdesktop flex gap-x-4 font-semibold text-lg'>
+          {reapeateList(1)}
         </ul>
-      </div>
-    </header>
+        <div className="home_search relative">
+          <input
+          className='border rounded-md border-primary_100 px-3 py-2 text-sm w-[300px]'
+          placeholder='새로운 것을 찾으시나요?'/>
+          <span className='absolute top-1/2 right-3 transformY-50'>돋보기</span>
+        </div>
+        <div className='home_login'>
+          <ul className='logindesktop flex gap-x-4 items-center'>
+            {reapeateList(2)}
+            <button className='text-primary_100 border border-primary_100 rounded py-2 px-4 text-sm'
+            onClick={()=>{setMadeModal(!madeModal)}}
+            >프로젝트 만들기</button>
+          </ul>
+        </div>
+        {madeModal&&<ProjectMadeModal/>}
+      </header>
   )
 }
 
@@ -62,6 +67,25 @@ export const Header2 = () => {
       <ul className='flex gap-x-4 items-center'>
         {reapeateList(2)}
       </ul>
+    </header>
+  )
+}
+
+export const StudioHeader = () =>{
+  const arrs = ['min','maker studio']
+  return(
+    <header className=' px-6 py-3 flex justify-between items-center'>
+      <div className=''>
+        {arrs?.map((el)=>( <span key={el} className='inline-block mr-2 bg-black rounded-full py-1 px-2 text-white text-xs font-bold'>{el}</span>))}
+      </div>
+      <div className='flex gap-x-2 items-center'>
+        <span className='bg-gray-100 p-2 rounded-full inline-block'>img</span>
+        <span>name</span>
+      </div>
+      <div className='flex gap-x-6'>
+        <span>확성기</span>
+        <span>나가기</span>
+      </div>
     </header>
   )
 }
