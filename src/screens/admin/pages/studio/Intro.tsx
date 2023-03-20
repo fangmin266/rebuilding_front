@@ -28,6 +28,12 @@ const Intro = () => {
             </>
         )
     }
+    const projectLists = [
+        {title: "1단계: 프로젝트 작성", content1: "필수 항목들을 작성해 제출해주면 끝이랍니다."},
+        {title: "2단계: 프로젝트 심사", content1: "와디즈 심사 정책을 바탕으로 프로젝트 진행에 필요한 요건과 콘텐츠를 검토해요.", content2: "필요시 와디즈 담당자가 피드백을 요청할 수 있어요."},
+        {title: "3단계: 프로젝트 공개", content1: "모든 준비가 완료된 프로젝트들은 최종 승인이 돼요.",content2: "메이커님이 직접 바로 공개하거나 원하는 공개 날짜를 예약할 수 있어요."},
+        {title: "4단계: 프로젝트 심의 및 모니터링", content1:"프로젝트 " }
+    ]
     const ProjectList = () =>{
         return(
             <div className=' border-primary_100 border-l-4 '>
