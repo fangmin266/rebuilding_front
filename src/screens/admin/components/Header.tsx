@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import ProjectMadeModal from '../pages/components/Home/ProjectMadeModal';
 export interface Link {
   name:string; link: string;
@@ -73,8 +74,9 @@ export const Header2 = () => {
 
 export const StudioHeader = () =>{
   const arrs = ['min','maker studio']
+  const navigate = useNavigate();
   return(
-    <header className=' px-6 py-3 flex justify-between items-center'>
+    <header className=' px-6 py-3 flex justify-between items-center border border-b'>
       <div className=''>
         {arrs?.map((el)=>( <span key={el} className='inline-block mr-2 bg-black rounded-full py-1 px-2 text-white text-xs font-bold'>{el}</span>))}
       </div>
@@ -82,9 +84,9 @@ export const StudioHeader = () =>{
         <span className='bg-gray-100 p-2 rounded-full inline-block'>img</span>
         <span>name</span>
       </div>
-      <div className='flex gap-x-6'>
+      <div className='flex gap-x-6 cursor-pointer'>
         <span>확성기</span>
-        <span>나가기</span>
+        <span onClick={()=> navigate('/')}>나가기</span>
       </div>
     </header>
   )

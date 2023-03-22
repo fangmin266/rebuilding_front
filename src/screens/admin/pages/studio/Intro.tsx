@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { ButtonDefault } from '../../components/Button';
 import { StudioHeader } from '../../components/Header'
 import { Head4_4xl } from '../../components/HeadTitle';
 import { IntroLoadingBar } from '../../components/LoadingBar'
+import { ProjectIntroSteps } from '../../staticLists/ProjectIntro';
+import { AsideHead } from './AsideHead';
 
 const Intro = () => {
-    const labelarr = ['프로젝트','작성중'];
+    const navigate= useNavigate();
+
     const sayHello = ['프로젝트 개설을 축하드려요.','서포터님들께 제품,서비스,콘텐츠를 드리며 잊지 못할 경험을 선물해 보세요.','프로젝트가 성공할 수 있도록 와디즈가 함께 할께요','그럼 출발해 볼까요?']
     const [introActive,setIntroActive] = useState(0)
-    const labels = () =>{
-        return(
-            <ul className='flex gap-x-2'>
-                {labelarr?.map((el)=><li className='inline-block rounded p-1 text-white text-xs border border-white'>{el}</li>)}
-            </ul>
-        )
+    const handleClick = () =>{
+        setIntroActive(1)
     }
+
+
 
     const Intro0 = () =>{
         return(
@@ -24,70 +26,78 @@ const Intro = () => {
                     {sayHello?.map((el,idx)=>(<li key={el} className={sayHello?.length === idx+1?"pt-12 pb-8":""}>{el}</li>))}
                 </ul>
                 <ButtonDefault title="좋아요" bgcolor='bg-primary_100' txtcolor='text-white' btnWidth='w-[330px]'
-                onClickFunction={()=>setIntroActive(introActive+1)}/>
+                onClickFunction={handleClick}/>
             </>
         )
     }
-    const projectLists = [
-        {title: "1단계: 프로젝트 작성", content1: "필수 항목들을 작성해 제출해주면 끝이랍니다."},
-        {title: "2단계: 프로젝트 심사", content1: "와디즈 심사 정책을 바탕으로 프로젝트 진행에 필요한 요건과 콘텐츠를 검토해요.", content2: "필요시 와디즈 담당자가 피드백을 요청할 수 있어요."},
-        {title: "3단계: 프로젝트 공개", content1: "모든 준비가 완료된 프로젝트들은 최종 승인이 돼요.",content2: "메이커님이 직접 바로 공개하거나 원하는 공개 날짜를 예약할 수 있어요."},
-        {title: "4단계: 프로젝트 심의 및 모니터링", content1:"프로젝트 " }
-    ]
+
     const ProjectList = () =>{
         return(
-            <div className=' border-primary_100 border-l-4 '>
-                <ul className='relative right-2'>
-                    <li className='flex gap-x-10'>
-                        <span className='bg-primary_100 inline-block w-4 h-4 rounded-full'></span>
-                        <div className='flex flex-col gap-y-2'>
-                            <span className='text-lg font-bold'>1단계: 프로젝트 작성</span>
-                            <p>필수 항목들을 작성해 제출하면 끝이랍니다.</p>
-                        </div>
-                    </li>
-                </ul>    
-           </div>
+            <ul className='relative right-2.5'>
+                {ProjectIntroSteps?.map((el,idx)=>(
+                <li key={idx} className={'relative border-l-4 pb-4 '+(ProjectIntroSteps?.length === idx+1?"border-white":"border-primary_100 ")}>
+                    <span className='bg-primary_100 inline-block w-4 h-4 rounded-full absolute top-0 left-[-10px]'></span>
+                    <div className='flex flex-col gap-y-2 px-10 relative top-[-6px]'>
+                        <span className='text-lg font-bold pb-1'>{el.title}</span>
+                        <p className='leading-3 text-sm'>{el.content1}</p>
+                        <p className='leading-3 text-sm'>{el.content2}</p>
+                    </div>
+                </li>
+                ))}
+            </ul>    
         )
     }
+    
+    // const AsideHead = () =>{
+    //     return(
+    //         <div className='p-4 bg-green-200 text-white'>
+    //             {labels()}
+    //             <ul className='font-bold text-xl pt-3'>
+    //                 <li>{"pei의"}</li>
+    //                 <li>멋진 프로젝트</li>
+    //             </ul>
+    //             <div className='flex justify-between items-center'>
+    //                 <span className='pt-2 font-semibold'>프로젝트 번호 19999</span>
+    //                 <span>화살</span>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
     const Intro1 = () =>{
         return(
-            <>
-               <Head4_4xl title={'프로젝트는 4단계로 진행돼요'}/>
-               <div className='pt-10'>
-               {ProjectList()}
-               </div>
-            </>
+        <>
+            <Head4_4xl title={'프로젝트는 4단계로 진행돼요'}/>
+            <div className='pt-10'>
+                {ProjectList()}
+                <div className='flex gap-x-12 items-center pt-16'>
+                    <div className='flex'>
+                        <span>화살</span>
+                        <span>이전</span>
+                    </div>
+                    <ButtonDefault title="시작하기" bgcolor='bg-primary_100' txtcolor='text-white' 
+                    btnWidth="w-[300px]" 
+                    onClickFunction={()=>{navigate("/studio/intro/funding")}}
+                    />
+                </div>
+            </div>
+        </>
         )
     }
+
   return (
     <>
         <StudioHeader/>
-        <div className='flex'>
-            <aside className='w-[300px]'>
-                <div className='p-4 bg-green-200 text-white opacity-80'>
-                    {labels()}
-                    <ul className='font-bold text-xl pt-3'>
-                        <li>{"pei의"}</li>
-                        <li>멋진 프로젝트</li>
-                    </ul>
-                    <div className='flex justify-between items-center'>
-                        <span className='pt-2 font-semibold'>프로젝트 번호 19999</span>
-                        <span>화살</span>
-                    </div>
-                </div>
-             
-                
-            </aside>
+        <div className='flex h-full'>
+            <AsideHead/>
             <div className='w-full'>
-                 <IntroLoadingBar />
+                 <IntroLoadingBar introActive={introActive} />
                  <div className='p-20 '>
-                    { introActive===0?Intro0()
-                    : introActive === 1? Intro1():
-                    ""}
+                    { introActive=== 0? Intro0():
+                    introActive ===1 ? Intro1():""}
                  </div>
             </div>
         </div>
-  
     </>
   )
 }
