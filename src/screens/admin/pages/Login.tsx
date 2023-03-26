@@ -1,5 +1,9 @@
+import axios from 'axios';
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import loginsSignupSlice, { emailLogin } from '../../../features/admin/loginsSignupSlice';
+import { AppDispatch } from '../../../features/store';
 import { ButtonDefault } from '../components/Button';
 import { Header2 } from '../components/Header'
 import { Head2 } from '../components/HeadTitle';
@@ -16,10 +20,12 @@ const Login = () => {
     email:'', password:''
   })
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
 
-  const onSubmitLogin = (e:React.ChangeEvent<HTMLFormElement>)  =>{
+  const onSubmitLogin = async(e:React.ChangeEvent<HTMLFormElement>)  =>{
     e.preventDefault()
-    console.log(login,'login')
+    console.log("here")
+    await dispatch(emailLogin(login))
   }
 
   const onChangeLogin = (e:React.ChangeEvent<HTMLInputElement>) =>{
