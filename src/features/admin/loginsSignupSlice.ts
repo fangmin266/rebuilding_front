@@ -31,6 +31,14 @@ async(params:LoginState)=>{
   return data;
 })
 
+export const kakaoLogin = createAsyncThunk("kakaoLogin",
+async () =>{
+  const res = await api.get('auth/kakaoLogin')
+  console.log(res,'res?')
+  return res.data
+}
+)
+
 const commonSlice = createSlice({
   name: "섹션",
   initialState,

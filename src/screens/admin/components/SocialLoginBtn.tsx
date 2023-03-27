@@ -1,12 +1,23 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { common } from '../../../common/api'
+import { kakaoLogin } from '../../../features/admin/loginsSignupSlice'
+import { AppDispatch } from '../../../features/store'
 import { ButtonDefault } from './Button'
 
 const SocialLoginBtn = () => {
   const social = ['구글','페북','애플']
+  const dispatch = useDispatch<AppDispatch>()
+  const onClickKakao = async() =>{
+    // document.form_chk.action = `${common.baseURL}base/kakaoLogin`
+    // document.form_chk.submit()
+    const res = await dispatch(kakaoLogin())
+    console.log(res,"res")
+  }
   return (
     <>
       <div className='flex flex-col gap-y-3 pt-3'>
-        <ButtonDefault title='카카오로 시작하기' bgcolor='bg-[#fae225]' txtcolor='text-black'/>
+        <ButtonDefault title='카카오로 시작하기' bgcolor='bg-[#fae225]' txtcolor='text-black' onClickFunction={onClickKakao}/>
         <ButtonDefault title='네이버로 시작하기' bgcolor='bg-[#00d337]' txtcolor='text-white'/>
       </div>
       <div className='w-full flex justify-center gap-x-3 pt-12'>
