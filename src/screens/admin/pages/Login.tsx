@@ -1,8 +1,7 @@
-import axios from 'axios';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import loginsSignupSlice, { emailLogin } from '../../../features/admin/loginsSignupSlice';
+import { emailLogin, emailSignup } from '../../../features/admin/loginsSignupSlice';
 import { AppDispatch } from '../../../features/store';
 import { ButtonDefault } from '../components/Button';
 import { Header2 } from '../components/Header'
@@ -11,12 +10,9 @@ import { Head2 } from '../components/HeadTitle';
 import { InputDefault } from '../components/Input';
 import SocialLoginBtn from '../components/SocialLoginBtn';
 
-interface LoginState {
-  email:string ;
-  password: string ;
-}
+
 const Login = () => {
-  const [login,setLogin] = useState<LoginState>({
+  const [login,setLogin] = useState({
     email:'', password:''
   })
   const navigate = useNavigate()

@@ -13,7 +13,8 @@ export interface InputProps{
 }
 
 export interface InputCheckboxProps{
-    thisRef: RefObject<HTMLInputElement>
+    thisRef: RefObject<HTMLInputElement>,
+    onChangeRef:(e: React.ChangeEvent<HTMLInputElement>)=> void; 
 }
 export const InputDefault = ({InType,Inplaceholder,InonChangeFunction,InName,InValue,InClassName}:InputDefualtProps) =>{
     return(
@@ -40,10 +41,11 @@ export const InputDisabled = ({Inplaceholder,InType}:InputProps) =>{
     )
 }
 
-export const InputCheckbox = ({thisRef}:InputCheckboxProps) =>{
+export const InputCheckbox = ({thisRef,onChangeRef}:InputCheckboxProps) =>{
     return(
         <input
-        ref={thisRef} 
+        ref={thisRef}
+        onChange={onChangeRef} 
         type='checkbox' 
         className='w-5 h-5 border-[#efefef]'/>
     )

@@ -11,34 +11,50 @@ const initialState: CommonState = {
   status: null,
 };
 
-interface LoginState {
+interface SignupState {
   email: string;
   password: string;
+  username:string,
+  agree:boolean
 }
-export const emailLogin = createAsyncThunk("emailLogin", 
-async(params:LoginState)=>{
-  const res = await api.post("auth/login",params, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
+interface LoginState {
+  email:string ;
+  password: string ;
+}
+interface EmailState {
+  email: string;
+}
 
-  const cookies = res.headers['set-cookie'] ?? '';
-  const data = res.data;
-  console.log(cookies, 'cookie');
-  console.log(data, 'data');
-  return data;
+export const emailSignup = createAsyncThunk("emailSignup", 
+async(params:SignupState)=>{
+  const res = await api.post("auth/signup",params)
+
+  console.log(res.data, 'res.data');
+  return res.data;
 })
+
+export const emailLogin = createAsyncThunk("emailLogin",
+  async(params:LoginState) =>{
+    const res = await api.post("auth/login")
+  // const cookies = res.headers['set-cookie'] ?? '';
+  // console.log(cookies, 'cookie');
+  }
+)
+
 
 export const kakaoLogin = createAsyncThunk("kakaoLogin",
 async () =>{
   const res = await api.get('auth/kakaoLogin')
   console.log(res,'res?')
+  return res
+}
+)
+export const sendEmail = createAsyncThunk("sendEmail",
+async (param:EmailState) =>{
+  const res = await api.post('auth/sendEmail',param)
   return res.data
 }
 )
-
 const commonSlice = createSlice({
   name: "섹션",
   initialState,
@@ -49,7 +65,7 @@ const commonSlice = createSlice({
   },
 
   extraReducers:(builder) =>{
-    builder.addCase(emailLogin.fulfilled, (state,action)=>{
+    builder.addCase(emailSignup.fulfilled, (state,action)=>{
         state.status = 'success'
     })
   }
