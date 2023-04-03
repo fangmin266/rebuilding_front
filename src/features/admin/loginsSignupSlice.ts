@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import api, { common } from "../../common/api";
 
 interface CommonState {
@@ -44,9 +44,16 @@ export const emailLogin = createAsyncThunk("emailLogin",
 
 export const kakaoLogin = createAsyncThunk("kakaoLogin",
 async () =>{
-  const res = await api.get('auth/kakaoLogin')
-  console.log(res,'res?')
+  // const config: AxiosRequestConfig={
+  //   method:"GET",
+  //   url:"auth/kakaoLogin",
+  //   withCredentials:true
+  // }
+  // const res = await api.request(config)
+  const res = await api.get("auth/kakaoLogin")
+  console.log(res)
   return res
+
 }
 )
 export const sendEmail = createAsyncThunk("sendEmail",
