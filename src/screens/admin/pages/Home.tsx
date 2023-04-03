@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { IHomeCategoryDummy,HomeCategoryDummy1,HomeCategoryDummy2,HomeCategoryDummy3, HomeRealTimeDummy1, HomeRealTimeDummy2, HomeStoreRecommendDummy1, HomeStoreRecommendDummy2 } from '../../../common/dummyDatas/HomeDummy';
 import { ContentHead1 } from '../components/ContentHead';
 import Footer from '../components/Footer';
@@ -6,11 +7,39 @@ import Footer from '../components/Footer';
 import { Header } from '../components/Header';
 import { deliveryStyle, pricePercent, scoreRate } from '../components/Units';
 
+interface sampleType{
+  id?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  bookname: string;
+  libraryname: string;
+  writer: string;
+  publisher: string;
+}
 const Home = () => {
   const [event,setEvent] = useState(true)
   const [aiNum,setAiNum] = useState(1)
   const [tabName,setTabname] = useState('펀딩/프리오더');
   const [storeNext,setStoreNext] = useState(1)
+  const [sample, setSample] = useState([])
+
+  const getBooks = async() =>{
+    const url = 'http://localhost:8000/product'
+    try {
+     const {data,status} =  await axios.get(url);
+     console.log(data, status)
+    if(status ===200){
+      setSample(data?.slice(0,5))
+    }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    getBooks();
+  },[])
   const eventCoupon = () =>{
     return(
       <>
@@ -27,22 +56,38 @@ const Home = () => {
     )
   }
 
-  const categorySection = (HomeCategoryDummy1:IHomeCategoryDummy[]) =>{
-    return(
-      <>
-        {HomeCategoryDummy1?.map((el,idx)=>(
-          <li className='pt-4'key={idx}>
-            <div className='h-[100px] bg-gray-100 rounded'></div>
-            <div className='pt-2 '>{el.title}</div>
-            <div className='flex items-center gap-x-1'>
-              <span className='text-primary_100'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
-              <span className='text-gray-400 text-xs'>{el.category}</span>
-            </div>
-          </li>
-        ))}
-      </>
-    )
-  }
+  // const categorySection = (HomeCategoryDummy1:IHomeCategoryDummy[]) =>{
+  //   return(
+  //     <>
+  //       {HomeCategoryDummy1?.map((el,idx)=>(
+  //         <li className='pt-4'key={idx}>
+  //           <div className='h-[100px] bg-gray-100 rounded'></div>
+  //           <div className='pt-2 '>{el.title}</div>
+  //           <div className='flex items-center gap-x-1'>
+  //             <span className='text-primary_100'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
+  //             <span className='text-gray-400 text-xs'>{el.category}</span>
+  //           </div>
+  //         </li>
+  //       ))}
+  //     </>
+  //   )
+  // }
+  // const categorySection = (sample) =>{
+  //   return(
+  //     <>
+  //       {sample?.map((el,idx)=>(
+  //         <li className='pt-4'key={idx}>
+  //           <div className='h-[100px] bg-gray-100 rounded'></div>
+  //           <div className='pt-2 '>{el.title}</div>
+  //           <div className='flex items-center gap-x-1'>
+  //             <span className='text-primary_100'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
+  //             <span className='text-gray-400 text-xs'>{el.category}</span>
+  //           </div>
+  //         </li>
+  //       ))}
+  //     </>
+  //   )
+  // }
   const specialExhibition = () =>{
     return(
       <li className='pt-4 col-span-2'>
@@ -142,8 +187,19 @@ const Home = () => {
         <div className='w-2/3 py-10'>
           <ContentHead1 title="취향 맞춤 프로젝트" subtitle="지금 함께 만드는 성공" option ={1}/>
           <ul className='grid grid-cols-3 gap-x-8'>
-            {categorySection(aiNum===1?HomeCategoryDummy1:aiNum===2?HomeCategoryDummy2:HomeCategoryDummy3)}
-            {specialExhibition()}
+            {/* {categorySection(aiNum===1?HomeCategoryDummy1:aiNum===2?HomeCategoryDummy2:HomeCategoryDummy3)}
+            {specialExhibition()} */}
+                    {/* {sample?.map((el,idx)=>(
+          <li className='pt-4'key={idx}>
+            <div className='h-[100px] bg-gray-100 rounded'></div>
+            <div className='pt-2 '>{el.title}</div>
+            <div className='flex items-center gap-x-1'>
+              <span className='text-primary_100'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span>
+              <span className='text-gray-400 text-xs'>{el.category}</span>
+            </div>
+          </li>
+        ))} */}
+
           </ul>
           <div className='flex justify-end'>
             {aiRecommentBtn()}
