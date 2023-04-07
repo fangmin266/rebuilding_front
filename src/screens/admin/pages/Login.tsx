@@ -9,7 +9,8 @@ import { Head2 } from '../components/HeadTitle';
 
 import { InputDefault } from '../components/Input';
 import SocialLoginBtn from '../components/SocialLoginBtn';
-
+import toastCommonProps from "../../../common/toast";
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [login,setLogin] = useState({
@@ -20,8 +21,27 @@ const Login = () => {
 
   const onSubmitLogin = async(e:React.ChangeEvent<HTMLFormElement>)  =>{
     e.preventDefault()
-    console.log("here")
-    await dispatch(emailLogin(login))
+    const res = await dispatch(emailLogin(login)).unwrap()
+    try {
+      if(res.data.ok){
+        toast(
+          <p className="whitespace-pre-line">
+           로그인되었습니다.
+          </p>,
+          toastCommonProps("top-right", "toast_alert",1000)
+        )
+        navigate('/')
+      }else{
+        toast(
+          <p className="whitespace-pre-line">
+           {res.data.error}
+          </p>,
+          toastCommonProps("top-right", "toast_alert",1000)
+        )
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const onChangeLogin = (e:React.ChangeEvent<HTMLInputElement>) =>{

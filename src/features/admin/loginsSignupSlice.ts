@@ -35,7 +35,8 @@ async(params:SignupState)=>{
 
 export const emailLogin = createAsyncThunk("emailLogin",
   async(params:LoginState) =>{
-    const res = await api.post("auth/login")
+    const res = await api.post("auth/login",params)
+    return res;
   // const cookies = res.headers['set-cookie'] ?? '';
   // console.log(cookies, 'cookie');
   }
@@ -50,7 +51,7 @@ async () =>{
   //   withCredentials:true
   // }
   // const res = await api.request(config)
-  const res = await api.get("auth/kakaoLogin")
+  const res = await api.get("auth/kakao")
   console.log(res)
   return res
 
