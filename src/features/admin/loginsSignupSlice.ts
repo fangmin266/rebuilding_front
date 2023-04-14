@@ -8,61 +8,64 @@ interface CommonState {
 }
 const initialState: CommonState = {
   i: 0,
-  status: null,
+  status: null
 };
 
 interface SignupState {
   email: string;
   password: string;
-  username:string,
-  agree:boolean
+  username: string;
+  agree: boolean;
 }
 interface LoginState {
-  email:string ;
-  password: string ;
+  email: string;
+  password: string;
 }
 interface EmailState {
   email: string;
 }
 
-export const emailSignup = createAsyncThunk("emailSignup", 
-async(params:SignupState)=>{
-  const res = await api.post("auth/signup",params)
+export const emailSignup = createAsyncThunk(
+  "emailSignup",
+  async (params: SignupState) => {
+    const res = await api.post("auth/signup", params);
 
-  console.log(res.data, 'res.data');
-  return res.data;
-})
-
-export const emailLogin = createAsyncThunk("emailLogin",
-  async(params:LoginState) =>{
-    const res = await api.post("auth/login",params)
-    return res;
-  // const cookies = res.headers['set-cookie'] ?? '';
-  // console.log(cookies, 'cookie');
+    console.log(res.data, "res.data");
+    return res.data;
   }
-)
+);
 
+export const emailLogin = createAsyncThunk(
+  "emailLogin",
+  async (params: LoginState) => {
+    // axios.defaults.withCredentials = true;
+    const res = await api.post("auth/login", params);
+    console.log(res.headers, "res");
+    console.log(document.cookie, "cookie");
+    const cookies = res.headers["set-cookie"] ?? "";
+    console.log(cookies, "cookie");
+    return res;
+  }
+);
 
-export const kakaoLogin = createAsyncThunk("kakaoLogin",
-async () =>{
+export const kakaoLogin = createAsyncThunk("kakaoLogin", async () => {
   // const config: AxiosRequestConfig={
   //   method:"GET",
   //   url:"auth/kakaoLogin",
   //   withCredentials:true
   // }
   // const res = await api.request(config)
-  const res = await api.get("auth/kakao")
-  console.log(res)
-  return res
-
-}
-)
-export const sendEmail = createAsyncThunk("sendEmail",
-async (param:EmailState) =>{
-  const res = await api.post('auth/sendEmail',param)
-  return res.data
-}
-)
+  const res = await api.get("auth/kakao");
+  console.log(res);
+  return res;
+});
+export const sendEmail = createAsyncThunk(
+  "sendEmail",
+  async (param: EmailState) => {
+    const res = await api.post("auth/sendEmail", param);
+    return res.data;
+  }
+);
 const commonSlice = createSlice({
   name: "섹션",
   initialState,
@@ -72,13 +75,13 @@ const commonSlice = createSlice({
     // },
   },
 
-  extraReducers:(builder) =>{
-    builder.addCase(emailSignup.fulfilled, (state,action)=>{
-        state.status = 'success'
-    })
+  extraReducers: (builder) => {
+    builder.addCase(emailSignup.fulfilled, (state, action) => {
+      state.status = "success";
+    });
   }
 });
 
-export const {  } = commonSlice.actions;
+export const {} = commonSlice.actions;
 
 export default commonSlice.reducer;
