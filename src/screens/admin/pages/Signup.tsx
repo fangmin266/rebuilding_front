@@ -34,8 +34,7 @@ const Signup = () => {
   const types = ["법인 회원가입", "투자조합 가입"];
   const [openModal, setOpenModal] = useState(false);
   const [email, setEmail] = useState("");
-  const [typeNumber, setTypeNumber] = useState("");
-  const [getAuthenticate, setGetAuthenticate] = useState("");
+  const [randomNum, setRandomNum] = useState("");
   const [confirmAuthenticate, setConfirmAuthenticate] = useState(false);
   const [signupInput, setSignupInput] = useState({
     username: "",
@@ -43,7 +42,7 @@ const Signup = () => {
     email: "",
     agree: false,
   });
-  const [times, setTimes] = useState();
+
   const [openAuthenticate, setOpenAuthenticate] = useState(false);
   const checkallRef = useRef<HTMLInputElement>(null);
   const modalCheckallRef = useRef<HTMLInputElement>(null);
@@ -85,9 +84,6 @@ const Signup = () => {
     { isRef: im14Ref, word: "만 14세 이상입니다.", haveto: true },
   ];
 
-  const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setTypeNumber(e.target.value);
-
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
     setSignupInput({ ...signupInput, [name]: value });
@@ -101,20 +97,6 @@ const Signup = () => {
     } else {
       toast(
         <p className="whitespace-pre-line">이메일 정보를 작성해주세요</p>,
-        toastCommonProps("top-right", "toast_alert", 1000)
-      );
-    }
-  };
-  const onClickOpenAuthenticate = async () => {
-    const res = await dispatch(sendEmail({ email: email })).unwrap();
-    console.log(res, "res");
-    if (res.statusCode === 200) {
-      setOpenAuthenticate(true);
-      setGetAuthenticate(res.confirmNumber);
-      //  타이머설정하기
-    } else {
-      toast(
-        <p className="whitespace-pre-line">{res.error}</p>,
         toastCommonProps("top-right", "toast_alert", 1000)
       );
     }
@@ -165,21 +147,9 @@ const Signup = () => {
     );
   };
 
-  const onClickAuthenticateOK = async () => {
-    console.log(getAuthenticate, "getAuthenticate");
-    if (String(getAuthenticate) === typeNumber) {
-      setOpenAuthenticate(false);
-      setConfirmAuthenticate(true);
-      setSignupInput({ ...signupInput, email: email });
-    } else {
-      console.log("not correct");
-    }
-  };
-
   const onClickAllRef = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupInput({ ...signupInput, agree: e.target.checked });
   };
-  const [minutes, setMinutes] = useState("");
 
   return (
     <>
@@ -239,27 +209,12 @@ const Signup = () => {
         <div className="mx-auto maxW ">
           <Head3 title="이메일 간편가입" />
           <div className="pt-8">
-            <TimerComponent setEmail={setEmail} email={email} />
-            {/* {openAuthenticate && (
-              <>
-                <div className=" flex gap-x-2 pt-6">
-                  <InputDefault
-                    InType="email"
-                    Inplaceholder="번호 확인"
-                    InClassName="w-2/3"
-                    InonChangeFunction={onChangeNumber}
-                  />
-                  <ButtonDefault
-                    title="확인"
-                    bgcolor="bg-primary_100"
-                    txtcolor="text-white"
-                    btnWidth="w-1/3"
-                    onClickFunction={onClickAuthenticateOK}
-                  />
-                </div>
-                <div>{times}</div>
-              </>
-            )} */}
+            <TimerComponent
+              setEmail={setEmail}
+              email={email}
+              randomNum={randomNum}
+              setRandomNum={setRandomNum}
+            />
           </div>
           <form
             className="flex flex-col py-8 gap-y-6"

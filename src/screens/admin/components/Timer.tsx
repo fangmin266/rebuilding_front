@@ -5,26 +5,62 @@ import { LabelLayoutInput } from "./LabelLayout";
 import { sendEmail } from "../../../features/admin/loginsSignupSlice";
 import { AppDispatch } from "../../../features/store";
 import { useDispatch } from "react-redux";
-
+import { toast } from "react-toastify";
+import toastCommonProps from "../../../common/toast";
+import { validateEmail } from "../../../common/function/reg";
 interface TimerProps {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   email: string;
+  setRandomNum: React.Dispatch<React.SetStateAction<string>>;
+  randomNum: string;
 }
 
-const TimerComponent: React.FC<TimerProps> = ({ setEmail, email }) => {
+const TimerComponent: React.FC<TimerProps> = ({
+  setEmail,
+  email,
+  setRandomNum,
+  randomNum,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [duration, setDuration] = useState<number>(180); // 초기 타이머 지속 시간 (초)
+  const duration = 180; // 초기 타이머 지속 시간 (초)
   const [remainingTime, setRemainingTime] = useState<number>(duration); // 남은 시간 (초)
   const [isRunning, setIsRunning] = useState<boolean>(false); // 타이머 실행 여부
+  const [resRandom, setResRandom] = useState<string>("");
+  const [showTimer, setShowTimer] = useState<boolean>(true);
+  const validatemail = validateEmail(email);
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
+
+  const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setRandomNum(e.target.value);
+
   const onClickOpenAuthenticate = async () => {
-    const res = await dispatch(sendEmail({ email: email })).unwrap();
-    if (res.statusCode === 200) {
+    if (validatemail) {
       handleTimerStart();
+      const res = await dispatch(sendEmail({ email: email })).unwrap();
+      try {
+        if (res.statusCode === 200) {
+          const rand = res.data.data.random;
+          setResRandom(rand);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast(
+        <p className="whitespace-pre-line">이메일주소를 다시 작성해주세요.</p>,
+        toastCommonProps("top-right", "toast_alert", 1000)
+      );
     }
   };
+  const onClickAuthenticateOK = async () => {
+    console.log(resRandom, randomNum);
+    if (resRandom === randomNum) {
+      setShowTimer(false);
+    }
+  };
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
@@ -67,38 +103,49 @@ const TimerComponent: React.FC<TimerProps> = ({ setEmail, email }) => {
   return (
     <div>
       <LabelLayoutInput title="이메일">
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 ">
           <InputDefault
             InType="email"
             Inplaceholder="이메일 계정"
-            InClassName="w-2/3"
+            InClassName={" w-2/3 " + (!validatemail ? " border-red-500 " : "")}
             InonChangeFunction={onChangeEmail}
           />
           <ButtonDefault
             title="인증하기"
-            bgcolor={"bg-primary_100"}
+            bgcolor={isRunning ? "bg-unactive_100" : "bg-primary_100"}
             txtcolor="text-white"
             btnWidth="w-1/3"
             onClickFunction={onClickOpenAuthenticate}
           />
         </div>
       </LabelLayoutInput>
-      <div className=" flex gap-x-2 pt-6">
-        <InputDefault
-          InType="email"
-          Inplaceholder={formatTime(remainingTime)}
-          InClassName="w-2/3"
-          // InonChangeFunction={onChangeNumber}
-        />
-        <ButtonDefault
-          title="확인"
-          bgcolor="bg-primary_100"
-          txtcolor="text-white"
-          btnWidth="w-1/3"
-          // onClickFunction={onClickAuthenticateOK}
-        />
-      </div>
-      {isRunning && <button onClick={handleTimerReset}>타이머 재설정</button>}
+      {showTimer ? (
+        <>
+          <div className=" flex gap-x-2 pt-6">
+            <InputDefault
+              InType="email"
+              Inplaceholder={formatTime(remainingTime)}
+              InClassName="w-2/3"
+              InDisabled={isRunning ? false : true}
+              InonChangeFunction={onChangeNumber}
+            />
+            <ButtonDefault
+              title="확인"
+              bgcolor={isRunning ? "bg-primary_100" : "bg-unactive_100 "}
+              txtcolor="text-white"
+              btnWidth="w-1/3"
+              onClickFunction={onClickAuthenticateOK}
+            />
+          </div>
+          {isRunning && (
+            <button onClick={handleTimerReset}>타이머 재설정</button>
+          )}
+        </>
+      ) : !showTimer && resRandom === randomNum ? (
+        <p className="text-primary_100 pt-2">이메일 인증에 성공했습니다.</p>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
