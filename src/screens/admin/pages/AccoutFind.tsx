@@ -9,9 +9,11 @@ import { useDispatch } from "react-redux";
 import {
   EmailState,
   findEmail,
+  sendPasswordResetLink,
 } from "../../../features/admin/loginsSignupSlice";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
+
 const AccoutFind = () => {
   const tabs = ["아이디 찾기", "비밀번호 찾기"];
   const [onTab, setOnTab] = useState("아이디 찾기");
@@ -45,6 +47,8 @@ const AccoutFind = () => {
     }
   };
 
+  // const sendNewPassLink;
+
   return (
     <>
       <Header2 />
@@ -63,7 +67,7 @@ const AccoutFind = () => {
                   }
                   onClick={() => {
                     setOnTab(el);
-                    console.log(el, onTab);
+                    setEmailInput("");
                   }}
                   key={el}
                 >
@@ -105,8 +109,40 @@ const AccoutFind = () => {
             ) : (
               <ButtonDefault
                 title="링크 발송"
-                bgcolor="bg-primary_100"
+                InDisabled={
+                  emailInput !== "" && validateEmail(emailInput) ? false : true
+                }
+                bgcolor={
+                  emailInput !== "" && validateEmail(emailInput)
+                    ? "bg-primary_100"
+                    : "bg-unactive_100"
+                }
                 txtcolor="text-white"
+                onClickFunction={async () => {
+                  const emailState: EmailState = {
+                    email: emailInput,
+                  };
+                  try {
+                    const res = await dispatch(
+                      sendPasswordResetLink(emailState)
+                    ).unwrap();
+                    if (res.data.statusCode === 200) {
+                      toast(
+                        <p className="whitespace-pre-line">
+                          이메일로 링크 발송되었습니다.
+                        </p>,
+                        toastCommonProps("top-right", "toast_alert", 1000)
+                      );
+                    }
+                  } catch (error) {
+                    toast(
+                      <p className="whitespace-pre-line">
+                        가입되지 않은 이메일니다.
+                      </p>,
+                      toastCommonProps("top-right", "toast_alert", 1000)
+                    );
+                  }
+                }}
               />
             )}
           </div>

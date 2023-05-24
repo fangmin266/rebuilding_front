@@ -9,8 +9,7 @@ import Signup from "./screens/admin/pages/Signup";
 import AccoutFind from "./screens/admin/pages/AccoutFind";
 import Intro from "./screens/admin/pages/studio/Intro";
 import IntroFunding from "./screens/admin/pages/studio/IntroFunding";
-import Test from "./screens/admin/pages/Test";
-
+import ResetPassword from "./screens/admin/pages/ResetPassword";
 function App() {
   return (
     <BrowserRouter>
@@ -21,10 +20,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/accountfind" element={<AccoutFind />} />
-          <Route path="/test" element={<Test />} />
           {/* studio */}
           <Route path="/studio/intro" element={<Intro />} />
           <Route path="/studio/intro/funding" element={<IntroFunding />} />
+          {/* 비밀번호 찾기 */}
+          <Route
+            path="/web/account/resetpassword"
+            element={<ResetPassword />}
+          />
         </Routes>
       </Layout>
     </BrowserRouter>

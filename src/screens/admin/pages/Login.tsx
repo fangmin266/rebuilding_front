@@ -50,7 +50,7 @@ const Login = () => {
 
   return (
     <>
-      <Header2 />0
+      <Header2 />
       <div
         onClick={() => {
           console.log(document.cookie);

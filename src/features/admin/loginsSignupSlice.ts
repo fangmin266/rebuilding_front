@@ -58,13 +58,21 @@ export const sendEmail = createAsyncThunk(
 );
 
 export const findEmail = createAsyncThunk(
-  "findEmail",
+  "findEmail", //이메일 유무 확인
   async (param: EmailState) => {
     const res = await api.post("auth/findEmail", param);
-    console.log(res, "res");
     return res;
   }
 );
+
+export const sendPasswordResetLink = createAsyncThunk(
+  "sendPasswordResetLink", //비밀번호 리셋
+  async (param: EmailState) => {
+    const res = await api.post("auth/link/passwordreset", param);
+    return res;
+  }
+);
+
 const commonSlice = createSlice({
   name: "섹션",
   initialState,
