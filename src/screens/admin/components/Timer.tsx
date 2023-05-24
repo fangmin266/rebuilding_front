@@ -13,6 +13,14 @@ interface TimerProps {
   email: string;
   setRandomNum: React.Dispatch<React.SetStateAction<string>>;
   randomNum: string;
+  setSignupInput: React.Dispatch<React.SetStateAction<any>>;
+  signupInput: {
+    username: string;
+    password: string;
+    passwordConfirm: string;
+    email: string;
+    isPersonalInfo: boolean;
+  };
 }
 
 const TimerComponent: React.FC<TimerProps> = ({
@@ -20,6 +28,8 @@ const TimerComponent: React.FC<TimerProps> = ({
   email,
   setRandomNum,
   randomNum,
+  setSignupInput,
+  signupInput,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const duration = 180; // 초기 타이머 지속 시간 (초)
@@ -58,6 +68,7 @@ const TimerComponent: React.FC<TimerProps> = ({
     console.log(resRandom, randomNum);
     if (resRandom === randomNum) {
       setShowTimer(false);
+      setSignupInput({ ...signupInput, email: email });
     }
   };
 

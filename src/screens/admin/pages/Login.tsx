@@ -77,18 +77,23 @@ const Login = () => {
           <div className="flex items-end gap-y-3 flex-col py-6">
             <InputDefault
               InType="email"
+              InClassName="w-full"
               Inplaceholder="이메일 입력"
               InonChangeFunction={onChangeLogin}
               InName="email"
               InValue={login.email}
             />
-            <InputDefault
-              InType="password"
-              Inplaceholder="비밀번호 입력"
-              InonChangeFunction={onChangeLogin}
-              InName="password"
-              InValue={login.password}
-            />
+            <div className="relative w-full">
+              <InputDefault
+                InType="password"
+                InClassName="w-full"
+                Inplaceholder="비밀번호 입력"
+                InonChangeFunction={onChangeLogin}
+                InName="password"
+                InValue={login.password}
+              />
+            </div>
+
             <span
               className="text-gray-600 text-xs tracking-wide cursor-pointer"
               onClick={() => navigate("/accountfind")}

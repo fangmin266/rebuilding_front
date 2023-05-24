@@ -1,5 +1,5 @@
-import { RefObject } from "react";
-
+import { RefObject, useState } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 export interface InputDefualtProps extends InputProps {
   InonChangeFunction?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   InName?: string;
@@ -26,24 +26,29 @@ export const InputDefault = ({
   InClassName,
   InDisabled,
 }: InputDefualtProps) => {
+  const [changeType, setChangeType] = useState(InType);
   return (
-    <input
-      className={InClassName}
-      type={InType}
-      placeholder={Inplaceholder}
-      onChange={InonChangeFunction}
-      name={InName}
-      value={InValue}
-      disabled={InDisabled}
-    />
-  );
-};
-
-export const InputDisabled = ({ Inplaceholder, InType }: InputProps) => {
-  return (
-    <div className="relative">
-      <input type={InType} disabled placeholder={Inplaceholder} />
-      <span className="absolute top-1/2 right-2 transformY-50">눈깔</span>
+    <div className={InClassName}>
+      <input
+        type={changeType}
+        placeholder={Inplaceholder}
+        onChange={InonChangeFunction}
+        name={InName}
+        value={InValue}
+        disabled={InDisabled}
+      />
+      {InType === "password" ? (
+        <div
+          className="absolute top-1/2 right-2 translate-y-50"
+          onClick={() => {
+            setChangeType(changeType === "password" ? "text" : "password");
+          }}
+        >
+          <VisibilityIcon />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

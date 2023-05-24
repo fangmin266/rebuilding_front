@@ -15,7 +15,7 @@ interface SignupState {
   email: string;
   password: string;
   username: string;
-  agree: boolean;
+  isPersonalInfo: boolean;
 }
 export interface LoginState {
   email: string;

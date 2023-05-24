@@ -10,17 +10,14 @@ import { ButtonDefault } from "../components/Button";
 import CenterModal from "../components/CenterModal";
 import { Header2 } from "../components/Header";
 import { Head2, Head3, Head3_3xl } from "../components/HeadTitle";
-import {
-  InputCheckbox,
-  InputDefault,
-  InputDisabled,
-} from "../components/Input";
+import { InputCheckbox, InputDefault } from "../components/Input";
 import { LabelLayoutInput } from "../components/LabelLayout";
 import SocialLoginBtn from "../components/SocialLoginBtn";
 import toastCommonProps from "../../../common/toast";
 import { useNavigate } from "react-router-dom";
 import TimerComponent from "../components/Timer";
-
+import { validatePass } from "../../../common/function/reg";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 interface ConfirmTerm {
   isRef: React.RefObject<HTMLInputElement>;
   strongword?: string;
@@ -35,15 +32,18 @@ const Signup = () => {
   const [openModal, setOpenModal] = useState(false);
   const [email, setEmail] = useState("");
   const [randomNum, setRandomNum] = useState("");
-  const [confirmAuthenticate, setConfirmAuthenticate] = useState(false);
   const [signupInput, setSignupInput] = useState({
     username: "",
     password: "",
+    passwordConfirm: "",
     email: "",
-    agree: false,
+    isPersonalInfo: false,
   });
 
-  const [openAuthenticate, setOpenAuthenticate] = useState(false);
+  const [passError, setPassError] = useState({
+    pass: false,
+    passConfirm: false,
+  });
   const checkallRef = useRef<HTMLInputElement>(null);
   const modalCheckallRef = useRef<HTMLInputElement>(null);
   const serviceResistRef = useRef<HTMLInputElement>(null);
@@ -52,6 +52,14 @@ const Signup = () => {
   const startupFindRef = useRef<HTMLInputElement>(null);
   const im14Ref = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const finalActive =
+    signupInput?.email &&
+    signupInput?.username &&
+    validatePass(signupInput?.password) &&
+    validatePass(signupInput?.passwordConfirm) &&
+    signupInput?.password === signupInput?.passwordConfirm &&
+    signupInput?.isPersonalInfo;
+
   const confirmTemrs: ConfirmTerm[] = [
     {
       isRef: serviceResistRef,
@@ -87,18 +95,41 @@ const Signup = () => {
   const onChangeSignup = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
     setSignupInput({ ...signupInput, [name]: value });
+    if (name === "password") {
+      if (validatePass(value)) {
+        setPassError({ ...passError, pass: true });
+      } else {
+        setPassError({ ...passError, pass: false });
+      }
+    } else if (name === "passwordConfirm") {
+      if (validatePass(value)) {
+        setPassError({ ...passError, passConfirm: true });
+      } else {
+        setPassError({ ...passError, passConfirm: false });
+      }
+    }
   };
 
   const submitEmailAdress = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await dispatch(emailSignup(signupInput)).unwrap();
-    if (res.ok) {
-      navigate("/");
-    } else {
-      toast(
-        <p className="whitespace-pre-line">이메일 정보를 작성해주세요</p>,
-        toastCommonProps("top-right", "toast_alert", 1000)
-      );
+    const param = {
+      username: signupInput.username,
+      password: signupInput.password,
+      email: signupInput.email,
+      isPersonalInfo: signupInput.isPersonalInfo,
+    };
+    const res = await dispatch(emailSignup(param)).unwrap();
+    console.log(res, "res");
+    try {
+      if (res.statusCode === 200) {
+        navigate("/");
+        toast(
+          <p className="whitespace-pre-line">로그인 성공</p>,
+          toastCommonProps("top-right", "toast_alert", 1000)
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -122,7 +153,7 @@ const Signup = () => {
                 <div>{el?.subWords}</div>
               </div>
             </div>
-            {el?.arrow && <span>화살</span>}
+            {el?.arrow && <ArrowForwardIosIcon fontSize="small" />}
           </li>
         ))}
       </>
@@ -142,13 +173,15 @@ const Signup = () => {
             이벤트·혜택알림 동의(선택), 만 14세 이상(필수)
           </p>
         </div>
-        <span onClick={() => setOpenModal(true)}>화살</span>
+        <span onClick={() => setOpenModal(true)}>
+          <ArrowForwardIosIcon fontSize="small" />
+        </span>
       </div>
     );
   };
 
   const onClickAllRef = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignupInput({ ...signupInput, agree: e.target.checked });
+    setSignupInput({ ...signupInput, isPersonalInfo: e.target.checked });
   };
 
   return (
@@ -214,6 +247,8 @@ const Signup = () => {
               email={email}
               randomNum={randomNum}
               setRandomNum={setRandomNum}
+              setSignupInput={setSignupInput}
+              signupInput={signupInput}
             />
           </div>
           <form
@@ -231,36 +266,46 @@ const Signup = () => {
             </LabelLayoutInput>
             <LabelLayoutInput title="비밀번호">
               <div className="flex flex-col gap-y-1">
-                {confirmAuthenticate ? (
-                  <>
-                    <InputDefault
-                      InType="password"
-                      Inplaceholder="비밀번호 입력"
-                      InName="password"
-                      InonChangeFunction={onChangeSignup}
-                      InValue={signupInput.password}
-                    />
-                    {/* <InputDefault InType='password' Inplaceholder='비밀번호 입력' InonChangeFunction={onChangeSignup} InValue={signupInput.name}/> */}
-                  </>
+                <InputDefault
+                  InType="password"
+                  Inplaceholder="비밀번호 입력(영문,숫자,특수문자 포함 7~20자)"
+                  InName="password"
+                  InClassName="relative"
+                  InonChangeFunction={onChangeSignup}
+                  InValue={signupInput.password}
+                  InDisabled={signupInput?.email ? false : true}
+                />
+                {passError?.pass ? (
+                  <p className="text-primary_100">비밀번호 형식이 올바릅니다</p>
+                ) : signupInput?.password === "" ? (
+                  ""
                 ) : (
-                  <>
-                    <InputDisabled
-                      Inplaceholder="비밀번호 입력"
-                      InType="password"
-                    />
-                    <InputDisabled
-                      Inplaceholder="비밀번호 입력"
-                      InType="password"
-                    />
-                  </>
+                  <p className="text-red-500">비밀번호 형식이 틀렸습니다.</p>
+                )}
+                <InputDefault
+                  InType="password"
+                  Inplaceholder="비밀번호 확인(영문,숫자,특수문자 포함 7~20자)"
+                  InName="passwordConfirm"
+                  InClassName="relative"
+                  InonChangeFunction={onChangeSignup}
+                  InValue={signupInput.passwordConfirm}
+                  InDisabled={signupInput?.email ? false : true}
+                />
+                {passError?.passConfirm ? (
+                  <p className="text-primary_100">비밀번호 형식이 올바릅니다</p>
+                ) : signupInput?.passwordConfirm === "" ? (
+                  ""
+                ) : (
+                  <p className="text-red-500">비밀번호 형식이 틀렸습니다.</p>
                 )}
               </div>
             </LabelLayoutInput>
             {checkAll()}
             <ButtonDefault
               title="완료"
-              bgcolor="bg-primary_100"
+              bgcolor={finalActive ? "bg-primary_100" : "bg-unactive_100"}
               txtcolor="text-white"
+              InDisabled={finalActive ? false : true}
             />
           </form>
           <div className="flex justify-center gap-x-2 pb-20">
