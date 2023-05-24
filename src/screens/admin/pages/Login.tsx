@@ -2,44 +2,37 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  LoginState,
   emailLogin,
-  emailSignup
+  emailSignup,
 } from "../../../features/admin/loginsSignupSlice";
 import { AppDispatch } from "../../../features/store";
 import { ButtonDefault } from "../components/Button";
 import { Header2 } from "../components/Header";
 import { Head2 } from "../components/HeadTitle";
-import fetch, { Headers } from "node-fetch";
 import { InputDefault } from "../components/Input";
 import SocialLoginBtn from "../components/SocialLoginBtn";
-import toastCommonProps from "../../../common/toast";
-import { toast } from "react-toastify";
-import axios, { AxiosResponse } from "axios";
-import { common } from "../../../common/api";
 import Cookies from "universal-cookie";
+import axios from "axios";
 const Login = () => {
   const [login, setLogin] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
+  //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const res = await dispatch(emailLogin(login)).unwrap();
+    const resdata = res.data;
+    if (resdata.statusCode === 200) {
+      console.log(resdata.data.data);
 
-    await axios
-      .post("http://localhost:3600/" + "auth/login", login, {
-        withCredentials: true
-      })
-      .then((response) => {
-        console.log(response);
-        // console.log(document.cookie); //httpOnly속성때문에 자바스크립트에서 읽을수없음
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      const cookies = res.headers["Set-Cookie"];
+      console.log(cookies); // Set-Cookie 값 출력
+    }
   };
 
   const onChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,8 +61,8 @@ const Login = () => {
           // 만료 시간 추출
           const maxAge = accessTokenCookie.match(/Max-Age=(\d+)/)[1];
           await axios
-            .post("http://localhost:3600/testapi", {
-              frontaccessToken: authToken
+            .post("https://localhost:3600/testapi", {
+              frontaccessToken: authToken,
             })
             .then((res) => {
               console.log("res");

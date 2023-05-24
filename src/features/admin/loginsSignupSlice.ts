@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import api, { common } from "../../common/api";
 
 interface CommonState {
@@ -8,7 +8,7 @@ interface CommonState {
 }
 const initialState: CommonState = {
   i: 0,
-  status: null
+  status: null,
 };
 
 interface SignupState {
@@ -17,7 +17,7 @@ interface SignupState {
   username: string;
   agree: boolean;
 }
-interface LoginState {
+export interface LoginState {
   email: string;
   password: string;
 }
@@ -29,8 +29,6 @@ export const emailSignup = createAsyncThunk(
   "emailSignup",
   async (params: SignupState) => {
     const res = await api.post("auth/signup", params);
-
-    console.log(res.data, "res.data");
     return res.data;
   }
 );
@@ -38,12 +36,12 @@ export const emailSignup = createAsyncThunk(
 export const emailLogin = createAsyncThunk(
   "emailLogin",
   async (params: LoginState) => {
-    // axios.defaults.withCredentials = true;
     const res = await api.post("auth/login", params);
-    console.log(res.headers, "res");
-    console.log(document.cookie, "cookie");
-    const cookies = res.headers["set-cookie"] ?? "";
-    console.log(cookies, "cookie");
+    console.log(res);
+    console.log(res.data, "res");
+    const cookies = res.headers["Set-Cookie"];
+
+    console.log(cookies);
     return res;
   }
 );
@@ -79,7 +77,7 @@ const commonSlice = createSlice({
     builder.addCase(emailSignup.fulfilled, (state, action) => {
       state.status = "success";
     });
-  }
+  },
 });
 
 export const {} = commonSlice.actions;
