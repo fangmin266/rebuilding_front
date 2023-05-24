@@ -14,6 +14,8 @@ import { InputDefault } from "../components/Input";
 import SocialLoginBtn from "../components/SocialLoginBtn";
 import Cookies from "universal-cookie";
 import axios from "axios";
+import toastCommonProps from "../../../common/toast";
+import { toast } from "react-toastify";
 const Login = () => {
   const [login, setLogin] = useState({
     email: "",
@@ -25,13 +27,18 @@ const Login = () => {
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await dispatch(emailLogin(login)).unwrap();
-    const resdata = res.data;
-    if (resdata.statusCode === 200) {
-      console.log(resdata.data.data);
-
-      const cookies = res.headers["Set-Cookie"];
-      console.log(cookies); // Set-Cookie 값 출력
+    try {
+      const res = await dispatch(emailLogin(login)).unwrap();
+      const resdata = res.data;
+      if (resdata.statusCode === 200) {
+        const cookies = res.headers["Set-Cookie"];
+        console.log(cookies); // Set-Cookie 값 출력
+      }
+    } catch (error) {
+      toast(
+        <p className="whitespace-pre-line">로그인 실패</p>,
+        toastCommonProps("top-right", "toast_alert", 1000)
+      );
     }
   };
 

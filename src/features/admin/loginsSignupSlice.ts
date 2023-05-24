@@ -21,11 +21,12 @@ export interface LoginState {
   email: string;
   password: string;
 }
-interface EmailState {
+export interface EmailState {
   email: string;
 }
 
 export const emailSignup = createAsyncThunk(
+  //일반 회원가입
   "emailSignup",
   async (params: SignupState) => {
     const res = await api.post("auth/signup", params);
@@ -34,6 +35,7 @@ export const emailSignup = createAsyncThunk(
 );
 
 export const emailLogin = createAsyncThunk(
+  // 일반 로그인
   "emailLogin",
   async (params: LoginState) => {
     const res = await api.post("auth/login", params);
@@ -46,22 +48,21 @@ export const emailLogin = createAsyncThunk(
   }
 );
 
-export const kakaoLogin = createAsyncThunk("kakaoLogin", async () => {
-  // const config: AxiosRequestConfig={
-  //   method:"GET",
-  //   url:"auth/kakaoLogin",
-  //   withCredentials:true
-  // }
-  // const res = await api.request(config)
-  const res = await api.get("auth/kakao");
-  console.log(res);
-  return res;
-});
 export const sendEmail = createAsyncThunk(
+  //회원가입시 이메일전송하여 랜덤번호 확인
   "sendEmail",
   async (param: EmailState) => {
     const res = await api.post("auth/sendEmail", param);
     return res.data;
+  }
+);
+
+export const findEmail = createAsyncThunk(
+  "findEmail",
+  async (param: EmailState) => {
+    const res = await api.post("auth/findEmail", param);
+    console.log(res, "res");
+    return res;
   }
 );
 const commonSlice = createSlice({
