@@ -24,7 +24,14 @@ export interface LoginState {
 export interface EmailState {
   email: string;
 }
-
+export interface ResetPassTokenState {
+  token: string;
+  password: string;
+}
+export interface RandomNumberState {
+  email: string;
+  random: string;
+}
 export const emailSignup = createAsyncThunk(
   //일반 회원가입
   "emailSignup",
@@ -75,11 +82,22 @@ export const sendPasswordResetLink = createAsyncThunk(
 
 export const getRandomNumInCache = createAsyncThunk(
   "getRandomNumInCache",
-  async () => {
-    const res = await api.get("auth/randomnum/incache");
+  async (param: RandomNumberState) => {
+    const res = await api.post("auth/randomnum/incache", param);
     return res;
   }
 );
+
+export const changePassBeforeLogin = createAsyncThunk(
+  "changePassBeforeLogin",
+  async (param: ResetPassTokenState) => {
+    const res = await api.post("user/reset/password", param);
+    return res;
+  }
+);
+export interface URLSTATE {
+  url: string;
+}
 
 const commonSlice = createSlice({
   name: "섹션",

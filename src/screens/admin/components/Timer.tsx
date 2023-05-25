@@ -3,6 +3,7 @@ import { InputDefault } from "./Input";
 import { ButtonDefault } from "./Button";
 import { LabelLayoutInput } from "./LabelLayout";
 import {
+  RandomNumberState,
   getRandomNumInCache,
   sendEmail,
 } from "../../../features/admin/loginsSignupSlice";
@@ -70,7 +71,12 @@ const TimerComponent: React.FC<TimerProps> = ({
     }
   };
   const onClickAuthenticateOK = async () => {
-    const res = await dispatch(getRandomNumInCache()).unwrap();
+    const param: RandomNumberState = {
+      email: email,
+      random: randomNum,
+    };
+    console.log(param, "param");
+    const res = await dispatch(getRandomNumInCache(param)).unwrap();
     if (res.data.statusCode === 200) {
       console.log(res.data.data, randomNum);
       if (res.data.data === randomNum) {

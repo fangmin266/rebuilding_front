@@ -13,6 +13,7 @@ import {
   KAKAO_CLIENT_ID,
   NAVER_CLIENT_ID,
 } from "../../../common/env";
+
 const SocialLoginBtn = () => {
   const social = ["구글", "페북"];
   const dispatch = useDispatch<AppDispatch>();

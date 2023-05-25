@@ -16,15 +16,16 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
+
+// import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
-  const [cookies, setCookie] = useCookies(["accessToken", "refreshToken"]);
 
+  // const [cookies] = useCookies(["Set-Cookie"]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
@@ -32,12 +33,20 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await dispatch(emailLogin(login)).unwrap();
+
       const resdata = res.data;
       if (resdata.statusCode === 200) {
+        toast(
+          <p className="whitespace-pre-line">로그인 성공</p>,
+          toastCommonProps("top-right", "toast_alert", 1000)
+        );
         // const cookies = res.headers["Authorization"];
-        const setcookie = res.headers["Set-Cookie"];
-        console.log(cookies);
-        console.log(cookies); // Set-Cookie 값 출력
+        // const setcookie = res.headers["Set-Cookie"];
+        // console.log(cookies);
+        // console.log(cookies); // Set-Cookie 값 출력
+        // console.log(cookies, "cookies");
+        const accessTokenCookie = new Cookies();
+        console.log(accessTokenCookie, "cookie");
       }
     } catch (error) {
       toast(
@@ -49,7 +58,6 @@ const Login = () => {
 
   const onChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
-    console.log(e.target.value);
     setLogin({ ...login, [name]: value });
   };
 
@@ -66,19 +74,21 @@ const Login = () => {
       </div>
       <div
         onClick={async () => {
-          const accessTokenCookie = new Cookies().get("accessTokenCookie");
+          const accessTokenCookie = new Cookies();
+          // .get("Authorization");
           // 인증 토큰 추출
-          const authToken = accessTokenCookie.match(/Authentiation=([^;]+)/)[1];
+          // const authToken = accessTokenCookie.match(/Authentiation=([^;]+)/)[1];
 
+          console.log(accessTokenCookie);
           // 만료 시간 추출
-          const maxAge = accessTokenCookie.match(/Max-Age=(\d+)/)[1];
-          await axios
-            .post("https://localhost:3600/testapi", {
-              frontaccessToken: authToken,
-            })
-            .then((res) => {
-              console.log("res");
-            });
+          // const maxAge = accessTokenCookie.match(/Max-Age=(\d+)/)[1];
+          // await axios
+          //   .post("https://localhost/testapi", {
+          //     frontaccessToken: authToken,
+          //   })
+          //   .then((res) => {
+          //     console.log("res");
+          //   });
         }}
       >
         누르면 쿠키확인
