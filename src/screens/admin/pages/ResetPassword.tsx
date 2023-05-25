@@ -7,9 +7,10 @@ import { AppDispatch } from "../../../features/store";
 
 const ResetPassword = () => {
   const location = useLocation();
+  const token = location.search.replace("?token=", "");
   const dispatch = useDispatch<AppDispatch>();
 
-  console.log(location.search.replace("?token=", ""));
+  console.log(token, "token");
   return (
     <>
       <Header2 />

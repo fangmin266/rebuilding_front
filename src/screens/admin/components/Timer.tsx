@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { InputDefault } from "./Input";
 import { ButtonDefault } from "./Button";
 import { LabelLayoutInput } from "./LabelLayout";
-import { sendEmail } from "../../../features/admin/loginsSignupSlice";
+import {
+  getRandomNumInCache,
+  sendEmail,
+} from "../../../features/admin/loginsSignupSlice";
 import { AppDispatch } from "../../../features/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -35,7 +38,7 @@ const TimerComponent: React.FC<TimerProps> = ({
   const duration = 180; // 초기 타이머 지속 시간 (초)
   const [remainingTime, setRemainingTime] = useState<number>(duration); // 남은 시간 (초)
   const [isRunning, setIsRunning] = useState<boolean>(false); // 타이머 실행 여부
-  const [resRandom, setResRandom] = useState<string>("");
+  const [sameCache, setSameCache] = useState<boolean>(false);
   const [showTimer, setShowTimer] = useState<boolean>(true);
   const validatemail = validateEmail(email);
 
@@ -51,8 +54,10 @@ const TimerComponent: React.FC<TimerProps> = ({
       const res = await dispatch(sendEmail({ email: email })).unwrap();
       try {
         if (res.statusCode === 200) {
-          const rand = res.data.data.random;
-          setResRandom(rand);
+          toast(
+            <p className="whitespace-pre-line">메일이 전송되었습니다.</p>,
+            toastCommonProps("top-right", "toast_alert", 1000)
+          );
         }
       } catch (error) {
         console.log(error);
@@ -65,10 +70,14 @@ const TimerComponent: React.FC<TimerProps> = ({
     }
   };
   const onClickAuthenticateOK = async () => {
-    console.log(resRandom, randomNum);
-    if (resRandom === randomNum) {
-      setShowTimer(false);
-      setSignupInput({ ...signupInput, email: email });
+    const res = await dispatch(getRandomNumInCache()).unwrap();
+    if (res.data.statusCode === 200) {
+      console.log(res.data.data, randomNum);
+      if (res.data.data === randomNum) {
+        setSameCache(true);
+        setShowTimer(false);
+        setSignupInput({ ...signupInput, email: email });
+      }
     }
   };
 
@@ -152,7 +161,7 @@ const TimerComponent: React.FC<TimerProps> = ({
             <button onClick={handleTimerReset}>타이머 재설정</button>
           )}
         </>
-      ) : !showTimer && resRandom === randomNum ? (
+      ) : !showTimer && sameCache ? (
         <p className="text-primary_100 pt-2">이메일 인증에 성공했습니다.</p>
       ) : (
         ""

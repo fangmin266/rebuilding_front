@@ -73,6 +73,14 @@ export const sendPasswordResetLink = createAsyncThunk(
   }
 );
 
+export const getRandomNumInCache = createAsyncThunk(
+  "getRandomNumInCache",
+  async () => {
+    const res = await api.get("auth/randomnum/incache");
+    return res;
+  }
+);
+
 const commonSlice = createSlice({
   name: "섹션",
   initialState,

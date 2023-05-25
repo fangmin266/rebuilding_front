@@ -16,11 +16,14 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
+
 const Login = () => {
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
+  const [cookies, setCookie] = useCookies(["accessToken", "refreshToken"]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +34,9 @@ const Login = () => {
       const res = await dispatch(emailLogin(login)).unwrap();
       const resdata = res.data;
       if (resdata.statusCode === 200) {
-        const cookies = res.headers["Set-Cookie"];
+        // const cookies = res.headers["Authorization"];
+        const setcookie = res.headers["Set-Cookie"];
+        console.log(cookies);
         console.log(cookies); // Set-Cookie 값 출력
       }
     } catch (error) {
