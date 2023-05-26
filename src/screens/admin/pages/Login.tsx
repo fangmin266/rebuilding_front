@@ -12,11 +12,14 @@ import { Header2 } from "../components/Header";
 import { Head2 } from "../components/HeadTitle";
 import { InputDefault } from "../components/Input";
 import SocialLoginBtn from "../components/SocialLoginBtn";
-import Cookies from "universal-cookie";
+
 import axios from "axios";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
+import Cookies from "universal-cookie";
+// import Cookies from "js-cookie";
 
+import { common } from "../../../common/api";
 // import { useCookies } from "react-cookie";
 
 const Login = () => {
@@ -28,32 +31,50 @@ const Login = () => {
   // const [cookies] = useCookies(["Set-Cookie"]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await dispatch(emailLogin(login)).unwrap();
-
-      const resdata = res.data;
-      if (resdata.statusCode === 200) {
-        toast(
-          <p className="whitespace-pre-line">로그인 성공</p>,
-          toastCommonProps("top-right", "toast_alert", 1000)
-        );
-        // const cookies = res.headers["Authorization"];
-        // const setcookie = res.headers["Set-Cookie"];
-        // console.log(cookies);
-        // console.log(cookies); // Set-Cookie 값 출력
-        // console.log(cookies, "cookies");
-        const accessTokenCookie = new Cookies();
-        console.log(accessTokenCookie, "cookie");
-      }
+      const res = await axios.post("https://localhost/auth", {
+        baseURL: "https://localhost/",
+        withCredentials: true, // 쿠키 받아오기 위한 옵션
+      });
+      console.log(res);
     } catch (error) {
-      toast(
-        <p className="whitespace-pre-line">로그인 실패</p>,
-        toastCommonProps("top-right", "toast_alert", 1000)
-      );
+      console.log(error);
     }
+
+    // const res = await axios.post(common.baseURL + "auth/login", login);
+    // console.log(res.headers, "res");
+    // const cookies = Cookies.get("Set-Cookie");
+    // console.log(cookies, "cookie");
+
+    // try {
+    //   const res = await dispatch(emailLogin(login)).unwrap();
+    //   console.log(res.data.statusCode, "res login");
+    //   const resdata = res.data;
+    //   if (resdata.statusCode === 200) {
+    //     toast(
+    //       <p className="whitespace-pre-line">로그인 성공</p>,
+    //       toastCommonProps("top-right", "toast_alert", 1000)
+    //     );
+    //     // const cookies = res.headers["Authorization"];
+    //     // const setcookie = res.headers["Set-Cookie"];
+    //     // console.log(cookies);
+    //     // console.log(cookies); // Set-Cookie 값 출력
+    //     // console.log(cookies, "cookies");
+
+    //     // const accessTokenCookie = new Cookies("Set-Cookie");
+    //     // console.log(accessTokenCookie, "cookie");
+
+    //   }
+    // } catch (error) {
+    //   toast(
+    //     <p className="whitespace-pre-line">로그인 실패</p>,
+    //     toastCommonProps("top-right", "toast_alert", 1000)
+    //   );
+    // }
   };
 
   const onChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,35 +85,7 @@ const Login = () => {
   return (
     <>
       <Header2 />
-      <div
-        onClick={() => {
-          console.log(document.cookie);
-          document.cookie = "";
-        }}
-      >
-        쿠키삭제
-      </div>
-      <div
-        onClick={async () => {
-          const accessTokenCookie = new Cookies();
-          // .get("Authorization");
-          // 인증 토큰 추출
-          // const authToken = accessTokenCookie.match(/Authentiation=([^;]+)/)[1];
 
-          console.log(accessTokenCookie);
-          // 만료 시간 추출
-          // const maxAge = accessTokenCookie.match(/Max-Age=(\d+)/)[1];
-          // await axios
-          //   .post("https://localhost/testapi", {
-          //     frontaccessToken: authToken,
-          //   })
-          //   .then((res) => {
-          //     console.log("res");
-          //   });
-        }}
-      >
-        누르면 쿠키확인
-      </div>
       <div className="w-full mx-auto maxW">
         <form onSubmit={onSubmitLogin}>
           <Head2 title="로그인" />

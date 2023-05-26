@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import api, { common } from "../../common/api";
+import Cookies from "universal-cookie";
+// import Cookies from "js-cookie";
 
 interface CommonState {
   i: number;
@@ -45,12 +47,14 @@ export const emailLogin = createAsyncThunk(
   // 일반 로그인
   "emailLogin",
   async (params: LoginState) => {
-    const res = await api.post("auth/login", params);
-    console.log(res);
-    console.log(res.data, "res");
-    const cookies = res.headers["Set-Cookie"];
+    const res = await api.post("auth/login", params, {
+      baseURL: common.baseURL,
+      withCredentials: true, // 쿠키 받아오기 위한 옵션
+    });
 
-    console.log(cookies);
+    const accessTokenCookie = new Cookies("Set-Cookie");
+    console.log(accessTokenCookie, "상태관리x");
+    // console.log(cookies);
     return res;
   }
 );
