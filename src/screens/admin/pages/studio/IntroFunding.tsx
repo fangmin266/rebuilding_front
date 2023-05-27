@@ -11,11 +11,19 @@ import {
 } from "../../staticLists/ProjectIntro";
 import { AsideHead } from "./AsideHead";
 import { InputDefault } from "../../components/Input";
+import CenterModal from "../../components/CenterModal";
+import { LabelLayoutInput } from "../../components/LabelLayout";
+import { AppDispatch } from "../../../../features/store";
+import { useDispatch } from "react-redux";
+import { mobileVerify } from "../../../../features/admin/fundingSlice";
 
 const IntroFunding = () => {
   const navigate = useNavigate();
-  const [openPhoneVarify, setOpenPhoneVarify] = useState(false);
-  const [phoneVarify, setPhonevarify] = useState("");
+  const [openPhoneverify, setOpenPhoneverify] = useState(false);
+  const [phoneverify, setPhoneverify] = useState("");
+  const [confirm, setConfirm] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  console.log(phoneverify, "phone");
   const productProceed = (proceed: string) => {
     return (
       <div className="border px-6 py-2 mt-4 mb-8">
@@ -72,6 +80,10 @@ const IntroFunding = () => {
     );
   };
 
+  const onClickSubmitPhone = async () => {
+    await dispatch(mobileVerify(phoneverify));
+    setConfirm(true);
+  };
   return (
     <>
       <StudioHeader />
@@ -84,32 +96,77 @@ const IntroFunding = () => {
                 잠깐! 프로젝트 진행 안내를 위해 휴대전화 인증이 반드시
                 필요합니다.
               </p>
-              <div className={`flex justify-between pt-4`}>
-                {openPhoneVarify ? (
-                  <InputDefault
-                    InClassName="bg-white w-[200px]"
-                    InType="text"
-                    Inplaceholder="인증번호입력"
-                    InName="varify"
-                    InValue={phoneVarify}
-                    InonChangeFunction={(e) => {
-                      setPhonevarify(e.target.value);
-                    }}
-                  />
-                ) : (
-                  <div></div>
-                )}
+              <div className={`flex justify-end pt-4`}>
                 <ButtonDefault
                   title="휴대전화 인증"
                   bgcolor="bg-primary_100"
                   txtcolor="text-white"
                   btnWidth="w-[120px]"
                   onClickFunction={() => {
-                    setOpenPhoneVarify(!openPhoneVarify);
+                    setOpenPhoneverify(!openPhoneverify);
                   }}
                 />
               </div>
             </div>
+            {openPhoneverify ? (
+              <CenterModal onClickClose={() => setOpenPhoneverify(false)}>
+                <LabelLayoutInput title="휴대번호">
+                  <div className="flex gap-x-2 w-full">
+                    <InputDefault
+                      InClassName="bg-white border w-3/4 p-2"
+                      InType="number"
+                      Inplaceholder="ex)010-1111-1111"
+                      InName="verify"
+                      InValue={phoneverify}
+                      InonChangeFunction={(e) => {
+                        setPhoneverify(e.target.value);
+                      }}
+                    />
+                    <ButtonDefault
+                      title="확인"
+                      bgcolor={
+                        phoneverify === ""
+                          ? "bg-unactive_100"
+                          : "bg-primary_100"
+                      }
+                      txtcolor="text-white"
+                      btnWidth="w-1/4"
+                      onClickFunction={onClickSubmitPhone}
+                    />
+                  </div>
+                </LabelLayoutInput>
+                {confirm && (
+                  <LabelLayoutInput title="인증번호">
+                    <div className="flex gap-x-2 w-full">
+                      <InputDefault
+                        InClassName="bg-white border w-3/4 p-2"
+                        InType="number"
+                        Inplaceholder="ex)10101"
+                        InName="verify"
+                        // InValue={phoneverify}
+                        // InonChangeFunction={(e) => {
+                        //   setPhoneverify(e.target.value);
+                        // }}
+                      />
+                      <ButtonDefault
+                        title="확인"
+                        // bgcolor={
+                        //   phoneverify === ""
+                        //     ? "bg-unactive_100"
+                        //     : "bg-primary_100"
+                        // }
+                        bgcolor="bg-primary_100"
+                        txtcolor="text-white"
+                        btnWidth="w-1/4"
+                        onClickFunction={onClickSubmitPhone}
+                      />
+                    </div>
+                  </LabelLayoutInput>
+                )}
+              </CenterModal>
+            ) : (
+              <div></div>
+            )}
 
             <div className="pt-6">
               <Head4_4xl title="프로젝트 관리" />

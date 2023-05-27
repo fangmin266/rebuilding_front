@@ -5,7 +5,6 @@ import { common } from "../../../common/api";
 import { AppDispatch } from "../../../features/store";
 import { ButtonDefault } from "./Button";
 import { useLocation } from "react-router-dom";
-import KakaoLogin from "react-kakao-login";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import {
   FACEBOOK_CLIENT_ID,

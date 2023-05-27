@@ -9,7 +9,7 @@ export interface InputDefualtProps extends InputProps {
 }
 
 export interface InputProps {
-  InType: "email" | "password" | "text";
+  InType: "email" | "password" | "text" | "number";
   Inplaceholder: string;
 }
 
@@ -28,8 +28,9 @@ export const InputDefault = ({
 }: InputDefualtProps) => {
   const [changeType, setChangeType] = useState(InType);
   return (
-    <div className={InClassName}>
+    <>
       <input
+        className={InClassName}
         type={changeType}
         placeholder={Inplaceholder}
         onChange={InonChangeFunction}
@@ -49,7 +50,7 @@ export const InputDefault = ({
       ) : (
         ""
       )}
-    </div>
+    </>
   );
 };
 
