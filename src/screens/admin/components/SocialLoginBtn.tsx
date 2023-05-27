@@ -18,32 +18,46 @@ const SocialLoginBtn = () => {
   const social = ["구글", "페북"];
   const dispatch = useDispatch<AppDispatch>();
 
+  const COMMON_REDIRECT = (social: string) => {
+    return `https://localhost/auth/${social}/callback`;
+  };
+  const REDIRECT_URIS = {
+    kakao: COMMON_REDIRECT("kakao"),
+    naver: COMMON_REDIRECT("naver"),
+    google: COMMON_REDIRECT("google"),
+    facebook: COMMON_REDIRECT("facebook"),
+  };
+
+  const SOCIAL_URL = {
+    kakao: `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URIS.kakao}&response_type=code`,
+    naver: `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=false&redirect_uri=${REDIRECT_URIS.naver}`,
+    google: `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${REDIRECT_URIS.google}&scope=profile email`,
+    facebook: `https://www.facebook.com/v13.0/dialog/oauth?response_type=code&client_id=${FACEBOOK_CLIENT_ID}&redirect_uri=${REDIRECT_URIS.facebook}&scope=email`,
+  };
+
+  const getRedirectURI = async (redirect: string) => {
+    const res = await axios.get(redirect);
+    console.log(res);
+  };
+
   const handleKakaoLogin = async () => {
-    const REDIRECT_URI = "https://localhost/auth/kakao/callback";
-    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    window.location.href = kakaoURL;
+    window.location.href = SOCIAL_URL.kakao;
+    getRedirectURI(REDIRECT_URIS.kakao);
   };
 
-  const handleNaverLogin = () => {
-    const REDIRIECT_URI = "https://localhost/auth/naver/callback";
-    const STATE = "false";
-    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${STATE}&redirect_uri=${REDIRIECT_URI}`;
-    window.location.href = naverURL;
+  const handleNaverLogin = async () => {
+    window.location.href = SOCIAL_URL.naver;
+    getRedirectURI(REDIRECT_URIS.naver);
   };
 
-  const handleGoogleLogin = () => {
-    const REDIRECT_URI = "https://localhost/auth/google/callback";
-    const SCOPE = "profile email";
-    const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`;
-    window.location.href = GOOGLE_AUTH_URL;
+  const handleGoogleLogin = async () => {
+    window.location.href = SOCIAL_URL.google;
+    getRedirectURI(REDIRECT_URIS.google);
   };
 
-  const handleFacebookLogin = () => {
-    const REDIRECT_URI = "https://localhost/auth/facebook/callback";
-    const SCOPE = "email";
-    const FACEBOOK_AUTH_URL = `https://www.facebook.com/v13.0/dialog/oauth?response_type=code&client_id=${FACEBOOK_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`;
-
-    window.location.href = FACEBOOK_AUTH_URL;
+  const handleFacebookLogin = async () => {
+    window.location.href = SOCIAL_URL.facebook;
+    getRedirectURI(REDIRECT_URIS.facebook);
   };
   return (
     <>

@@ -15,6 +15,7 @@ import Footer from "../components/Footer";
 
 import { Header } from "../components/Header";
 import { deliveryStyle, pricePercent, scoreRate } from "../components/Units";
+import { common } from "../../../common/api";
 
 interface SampleType {
   id?: string;
@@ -33,7 +34,7 @@ const Home = () => {
   const [sample, setSample] = useState<SampleType[]>([]);
 
   const getBooks = async (clicknum: number) => {
-    const url = "https://localhost/product/all";
+    const url = common.baseURL + "product/all";
     try {
       const { data, status } = await axios.get<SampleType[]>(url);
       console.log(data, status);
