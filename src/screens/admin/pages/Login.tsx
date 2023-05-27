@@ -16,11 +16,9 @@ import SocialLoginBtn from "../components/SocialLoginBtn";
 import axios from "axios";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
-import Cookies from "universal-cookie";
-// import Cookies from "js-cookie";
 
 import { common } from "../../../common/api";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [login, setLogin] = useState({
@@ -32,15 +30,18 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
+  const [cookies, setCookies, removeCookie] = useCookies(["Set-Cookie"]);
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(cookies, "cookies front");
     try {
-      const res = await axios.post("https://localhost/auth", {
-        baseURL: "https://localhost/",
+      const res = await axios.post("https://localhost/auth/login", {
+        baseURL: "https://localhost/auth/login",
         withCredentials: true, // 쿠키 받아오기 위한 옵션
       });
       console.log(res);
+      setCookies("Set-Cookie", res.data);
     } catch (error) {
       console.log(error);
     }
