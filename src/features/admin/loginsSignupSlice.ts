@@ -32,6 +32,13 @@ export interface RandomNumberState {
   email: string;
   random: string;
 }
+export interface URLSTATE {
+  url: string;
+}
+export interface autoLoginState {
+  authenticateToken: string;
+  refreshToken: string;
+}
 export const emailSignup = createAsyncThunk(
   //일반 회원가입
   "emailSignup",
@@ -94,9 +101,14 @@ export const changePassBeforeLogin = createAsyncThunk(
     return res;
   }
 );
-export interface URLSTATE {
-  url: string;
-}
+
+export const autoLogin = createAsyncThunk(
+  "autoLogin",
+  async (param: autoLoginState) => {
+    const res = await api.post("auth/autologin", param);
+    return res;
+  }
+);
 
 const commonSlice = createSlice({
   name: "섹션",

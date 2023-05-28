@@ -16,6 +16,7 @@ import axios from "axios";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
 import { common } from "../../../common/api";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [login, setLogin] = useState({
@@ -26,18 +27,21 @@ const Login = () => {
   // const [cookies] = useCookies(["Set-Cookie"]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
-      const res = await axios.post("http://localhost:3600/auth/login", login, {
-        baseURL: "http://localhost:3600/auth/login",
-        withCredentials: true, // 쿠키 받아오기 위한 옵션
-      });
-      console.log(document.cookie); //쿠키
-      if (res.data.statusCode === 200) {
+      const res = await axios.post(
+        "http://localhost:3600/" + "auth/login",
+        login,
+        {
+          baseURL: "http://localhost:3600/auth/login",
+          withCredentials: true, // 쿠키 받아오기 위한 옵션
+        }
+      );
+      console.log(res);
+      if (res.status === 201) {
+        console.log(document.cookie);
         toast(
           <p className="whitespace-pre-line">로그인 성공</p>,
           toastCommonProps("top-right", "toast_alert", 1000)
@@ -51,37 +55,6 @@ const Login = () => {
         toastCommonProps("top-right", "toast_alert", 1000)
       );
     }
-
-    // const res = await axios.post(common.baseURL + "auth/login", login);
-    // console.log(res.headers, "res");
-    // const cookies = Cookies.get("Set-Cookie");
-    // console.log(cookies, "cookie");
-
-    // try {
-    //   const res = await dispatch(emailLogin(login)).unwrap();
-    //   console.log(res.data.statusCode, "res login");
-    //   const resdata = res.data;
-    //   if (resdata.statusCode === 200) {
-    //     toast(
-    //       <p className="whitespace-pre-line">로그인 성공</p>,
-    //       toastCommonProps("top-right", "toast_alert", 1000)
-    //     );
-    //     // const cookies = res.headers["Authorization"];
-    //     // const setcookie = res.headers["Set-Cookie"];
-    //     // console.log(cookies);
-    //     // console.log(cookies); // Set-Cookie 값 출력
-    //     // console.log(cookies, "cookies");
-
-    //     // const accessTokenCookie = new Cookies("Set-Cookie");
-    //     // console.log(accessTokenCookie, "cookie");
-
-    //   }
-    // } catch (error) {
-    //   toast(
-    //     <p className="whitespace-pre-line">로그인 실패</p>,
-    //     toastCommonProps("top-right", "toast_alert", 1000)
-    //   );
-    // }
   };
 
   const onChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +67,13 @@ const Login = () => {
       <Header2 />
 
       <div className="w-full mx-auto maxW">
+        <div
+          onClick={() => {
+            console.log(document.cookie, "coo");
+          }}
+        >
+          쿠키
+        </div>
         <form onSubmit={onSubmitLogin}>
           <Head2 title="로그인" />
           <div className="flex items-end gap-y-3 flex-col py-6">

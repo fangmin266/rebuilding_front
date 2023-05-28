@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectMadeModal from "../pages/components/Home/ProjectMadeModal";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../features/store";
+import { autoLogin } from "../../../features/admin/loginsSignupSlice";
 export interface Link {
   name: string;
   link: string;
@@ -45,6 +49,20 @@ export const Logo = () => {
 };
 export const Header = () => {
   const [madeModal, setMadeModal] = useState(false);
+  const [cookies] = useCookies();
+  const dispatch = useDispatch<AppDispatch>();
+  console.log(cookies);
+  useEffect(() => {
+    const param = {
+      authenticateToken: cookies["Authentication"],
+      refreshToken: cookies["Refresh"],
+    };
+    const startAutoLogin = async () => {
+      const res = await dispatch(autoLogin(param));
+      console.log(res, "res");
+    };
+    startAutoLogin();
+  }, []);
   return (
     <header className="header-wrapper max-w-layout w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white relative">
       <Logo />

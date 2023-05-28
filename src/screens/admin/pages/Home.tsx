@@ -54,7 +54,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getBooks(1);
+    // getBooks(1);
   }, []);
   const eventCoupon = () => {
     return (

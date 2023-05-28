@@ -57,10 +57,11 @@
       // console.log(cookiesFromHeader, "header");
 
       console.log(document.cookie);
-      //쿠키 저장되어있는지 확인, 굳이 다른 라이브러리 안써도됨. react-cookie 썼다가 헷갈려서 많이 헤맸음(react-cookie는 클라이언트에서 쿠키생성할때 사용하는 것 같다)
+      //쿠키 저장되어있는지 확인, 굳이 다른 라이브러리 안써도 되지만, react-cookie는 쿠키를 가져오기 쉽게 해주는 훅
 ```
 
 - 자주발생하는 문제
 - authorization 401 : 미 회원가입시 발생 =>@UseGuards(LocalAuthGuard) 에서 발생하여 에러핸들링
 - cors 에러 : 프론트 백엔드 도메인 확인(반드시 동일 도메인)
 - cookie 들어오지 않는 경우 : 백엔드 cookie 옵션값 체크(추가하지 않을 경우 front cookie에 자동 저장 되지 않음), 도메인 일치 체크, enableCors 및 credential 체크
+- 개발자도구 cookie에 쿠키가 들어왔음에도 document.cookie로 안읽히는 경우: httpOnly;는 javascript로 읽을수 없음
