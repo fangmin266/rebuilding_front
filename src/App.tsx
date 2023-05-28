@@ -10,29 +10,27 @@ import AccoutFind from "./screens/admin/pages/AccoutFind";
 import Intro from "./screens/admin/pages/studio/Intro";
 import IntroFunding from "./screens/admin/pages/studio/IntroFunding";
 import ResetPassword from "./screens/admin/pages/ResetPassword";
-import { CookiesProvider } from "react-cookie";
+
 function App() {
   return (
     <BrowserRouter>
-      <CookiesProvider>
-        <ToastContainer />
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/accountfind" element={<AccoutFind />} />
-            {/* studio */}
-            <Route path="/studio/intro" element={<Intro />} />
-            <Route path="/studio/intro/funding" element={<IntroFunding />} />
-            {/* 비밀번호 찾기 */}
-            <Route
-              path="/web/account/resetpassword"
-              element={<ResetPassword />}
-            />
-          </Routes>
-        </Layout>
-      </CookiesProvider>
+      <ToastContainer />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/accountfind" element={<AccoutFind />} />
+          {/* studio */}
+          <Route path="/studio/intro" element={<Intro />} />
+          <Route path="/studio/intro/funding" element={<IntroFunding />} />
+          {/* 비밀번호 찾기 */}
+          <Route
+            path="/web/account/resetpassword"
+            element={<ResetPassword />}
+          />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }
