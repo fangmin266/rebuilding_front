@@ -6,7 +6,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../features/store";
-import { autoLogin } from "../../../features/admin/loginsSignupSlice";
+import {
+  autoLogin,
+  loginInfo,
+  setNewAccessToken,
+} from "../../../features/admin/loginsSignupSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../features/store";
 export interface Link {
   name: string;
   link: string;
@@ -22,7 +28,8 @@ export const lists2: Link[] = [
   { name: "로그인", link: "/login" },
   { name: "회원가입", link: "/signup" },
 ];
-export const reapeateList = (option: number) => {
+
+export const reapeatList = (option: number) => {
   return (
     <>
       {option === 1
@@ -49,25 +56,70 @@ export const Logo = () => {
 };
 export const Header = () => {
   const [madeModal, setMadeModal] = useState(false);
-  const [cookies] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "Refresh",
+    "Authentication",
+  ]);
+  const [loginHead, setLoginHead] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  console.log(cookies);
+  const { userInfo } = useSelector(
+    (state: RootState) => state.adminloginAndsignup
+  );
+  console.log(loginHead, "loginHe");
   useEffect(() => {
     const param = {
-      authenticateToken: cookies["Authentication"],
+      accessToken: cookies["Authentication"],
+      refreshToken: cookies["Refresh"],
+    };
+    const param1 = {
       refreshToken: cookies["Refresh"],
     };
     const startAutoLogin = async () => {
-      const res = await dispatch(autoLogin(param));
-      console.log(res, "res");
+      try {
+        const res = await dispatch(autoLogin(param)).unwrap();
+        console.log(res, "res");
+      } catch (error) {
+        console.log(error);
+      }
     };
     startAutoLogin();
+    // const startAutoLogin = async () => {
+    //   try {
+    //     const res = await dispatch(autoLogin(param)).unwrap();
+
+    //     if (res.data.statusCode === 200) {
+    //       setLoginHead(false);
+    //       console.log(res.data.data, "res.data 여기서 유저 불러오기");
+    //       await dispatch(loginInfo(res.data.data));
+    //       console.log("here");
+    //     } else {
+    //       console.log("error");
+    //     }
+    //   } catch (error) {
+    //     //accessToken 만료시
+    //     console.log(param1, "param1");
+    //     const res = await dispatch(setNewAccessToken(param1)).unwrap();
+    //     console.log(res);
+    //     if (res.data.statusCode !== 200) {
+    //       setLoginHead(true);
+    //       // removeCookie("Refresh");
+    //     } else {
+    //       console.log("here");
+    //     }
+    //     console.log("here");
+    //     // removeCookie("Authentication");
+    //   }
+    // };
+    // if (cookies["Refresh"]) {
+    //   startAutoLogin();
+    // }
   }, []);
+
   return (
     <header className="header-wrapper max-w-layout w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white relative">
       <Logo />
       <ul className="GNBdesktop flex gap-x-4 font-semibold text-lg">
-        {reapeateList(1)}
+        {reapeatList(1)}
       </ul>
       <div className="home_search relative">
         <input
@@ -78,7 +130,16 @@ export const Header = () => {
       </div>
       <div className="home_login">
         <ul className="logindesktop flex gap-x-4 items-center">
-          {reapeateList(2)}
+          {loginHead ? (
+            <>
+              <span className="block overflow-hidden rounded-full w-8 h-8">
+                <img src={userInfo?.profile_img} alt="profile_img" />
+              </span>
+              <li>{userInfo?.username}</li>
+            </>
+          ) : (
+            reapeatList(2)
+          )}
           <button
             className="text-primary_100 border border-primary_100 rounded py-2 px-4 text-sm"
             onClick={() => {
@@ -99,7 +160,7 @@ export const Header2 = () => {
     <header className="header-wrapper w-full flex items-center mx-auto 2xl:w-100 px-20 py-3 justify-between bg-white border-b border-gray-100">
       <div className="w-[112.9px]"></div>
       <Logo />
-      <ul className="flex gap-x-4 items-center">{reapeateList(2)}</ul>
+      <ul className="flex gap-x-4 items-center">{reapeatList(2)}</ul>
     </header>
   );
 };

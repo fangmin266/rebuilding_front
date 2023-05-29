@@ -9,13 +9,13 @@ import loginsSignupSlice from "./admin/loginsSignupSlice";
 const reducers = combineReducers({
   //admin
   admincommon: commonSlice,
-  studio:studioSlice,
-  adminloginAndsignup: loginsSignupSlice
-})
+  studio: studioSlice,
+  adminloginAndsignup: loginsSignupSlice,
+});
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["admincommon", "adminloginAndsignup"],
+  whitelist: ["admincommon"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

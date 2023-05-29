@@ -15,7 +15,6 @@ import SocialLoginBtn from "../components/SocialLoginBtn";
 import axios from "axios";
 import toastCommonProps from "../../../common/toast";
 import { toast } from "react-toastify";
-import { common } from "../../../common/api";
 import { useCookies } from "react-cookie";
 
 const Login = () => {
@@ -24,12 +23,20 @@ const Login = () => {
     password: "",
   });
 
-  // const [cookies] = useCookies(["Set-Cookie"]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "Refresh",
+    "Authentication",
+  ]);
+
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
+
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    removeCookie("Refresh");
+    removeCookie("Authentication");
     try {
       const res = await axios.post(
         "http://localhost:3600/" + "auth/login",
@@ -41,7 +48,6 @@ const Login = () => {
       );
       console.log(res);
       if (res.status === 201) {
-        console.log(document.cookie);
         toast(
           <p className="whitespace-pre-line">로그인 성공</p>,
           toastCommonProps("top-right", "toast_alert", 1000)

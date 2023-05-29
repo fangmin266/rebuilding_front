@@ -5,10 +5,12 @@ import api, { common } from "../../common/api";
 interface CommonState {
   i: number;
   status: null | string;
+  userInfo: null | any;
 }
 const initialState: CommonState = {
   i: 0,
   status: null,
+  userInfo: null,
 };
 
 interface SignupState {
@@ -36,7 +38,11 @@ export interface URLSTATE {
   url: string;
 }
 export interface autoLoginState {
-  authenticateToken: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface refreshTokenState {
   refreshToken: string;
 }
 export const emailSignup = createAsyncThunk(
@@ -110,13 +116,24 @@ export const autoLogin = createAsyncThunk(
   }
 );
 
-const commonSlice = createSlice({
-  name: "섹션",
+export const setNewAccessToken = createAsyncThunk(
+  "autoLogin/newAccessToken",
+  async (param: refreshTokenState) => {
+    const res = await api.post("auth/autologin/newAccessToken", param, {
+      baseURL: common.baseURL,
+      withCredentials: true, // 쿠키 받아오기 위한 옵션
+    });
+    return res;
+  }
+);
+
+const loginsSignupSlice = createSlice({
+  name: "loginsSignupSlice",
   initialState,
   reducers: {
-    // onSetSection: (state, action: PayloadAction<string>) => {
-    //   state.section = action.payload;
-    // },
+    loginInfo: (state, action: PayloadAction<any>) => {
+      state.userInfo = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -126,6 +143,6 @@ const commonSlice = createSlice({
   },
 });
 
-export const {} = commonSlice.actions;
+export const { loginInfo } = loginsSignupSlice.actions;
 
-export default commonSlice.reducer;
+export default loginsSignupSlice.reducer;
