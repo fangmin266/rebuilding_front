@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import api, { common } from "../../common/api";
+import { PURGE } from "redux-persist";
 
 interface CommonState {
   i: number;
@@ -38,7 +39,7 @@ export interface URLSTATE {
   url: string;
 }
 export interface autoLoginState {
-  accessToken: string;
+  // accessToken: string;
   refreshToken: string;
 }
 
@@ -111,7 +112,11 @@ export const changePassBeforeLogin = createAsyncThunk(
 export const autoLogin = createAsyncThunk(
   "autoLogin",
   async (param: autoLoginState) => {
-    const res = await api.post("auth/autologin", param);
+    const res = await api.post("auth/autologin", param, {
+      baseURL: common.baseURL,
+      withCredentials: true, // 쿠키 받아오기 위한 옵션
+    });
+    console.log(res, "res?");
     return res;
   }
 );
@@ -134,15 +139,20 @@ const loginsSignupSlice = createSlice({
     loginInfo: (state, action: PayloadAction<any>) => {
       state.userInfo = action.payload;
     },
+    removeLoginInfo: (state) => {
+      //사용자정보삭제 로컬스토리지 (미해결)
+      state.userInfo = {};
+    },
   },
 
   extraReducers: (builder) => {
     builder.addCase(emailSignup.fulfilled, (state, action) => {
       state.status = "success";
     });
+    builder.addCase(PURGE, () => initialState);
   },
 });
 
-export const { loginInfo } = loginsSignupSlice.actions;
+export const { loginInfo, removeLoginInfo } = loginsSignupSlice.actions;
 
 export default loginsSignupSlice.reducer;

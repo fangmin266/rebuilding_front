@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   LoginState,
+  autoLogin,
   emailLogin,
   emailSignup,
+  loginInfo,
 } from "../../../features/admin/loginsSignupSlice";
 import { AppDispatch } from "../../../features/store";
 import { ButtonDefault } from "../components/Button";
@@ -25,12 +27,12 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
+  //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const [cookies, setCookie, removeCookie] = useCookies([
     "Refresh",
     "Authentication",
   ]);
-
-  //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
 
   const onSubmitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,8 +48,8 @@ const Login = () => {
           withCredentials: true, // 쿠키 받아오기 위한 옵션
         }
       );
-      console.log(res);
       if (res.status === 201) {
+        dispatch(loginInfo(res.data.user));
         toast(
           <p className="whitespace-pre-line">로그인 성공</p>,
           toastCommonProps("top-right", "toast_alert", 1000)
@@ -73,13 +75,6 @@ const Login = () => {
       <Header2 />
 
       <div className="w-full mx-auto maxW">
-        <div
-          onClick={() => {
-            console.log(document.cookie, "coo");
-          }}
-        >
-          쿠키
-        </div>
         <form onSubmit={onSubmitLogin}>
           <Head2 title="로그인" />
           <div className="flex items-end gap-y-3 flex-col py-6">

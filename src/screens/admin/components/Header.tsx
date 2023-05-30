@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectMadeModal from "../pages/components/Home/ProjectMadeModal";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -9,6 +9,7 @@ import { AppDispatch } from "../../../features/store";
 import {
   autoLogin,
   loginInfo,
+  removeLoginInfo,
   setNewAccessToken,
 } from "../../../features/admin/loginsSignupSlice";
 import { useSelector } from "react-redux";
@@ -56,64 +57,42 @@ export const Logo = () => {
 };
 export const Header = () => {
   const [madeModal, setMadeModal] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "Refresh",
-    "Authentication",
-  ]);
-  const [loginHead, setLoginHead] = useState(false);
+
+  const [loginReady, setloginReady] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { userInfo } = useSelector(
     (state: RootState) => state.adminloginAndsignup
   );
-  console.log(loginHead, "loginHe");
-  useEffect(() => {
-    const param = {
-      accessToken: cookies["Authentication"],
-      refreshToken: cookies["Refresh"],
-    };
-    const param1 = {
-      refreshToken: cookies["Refresh"],
-    };
-    const startAutoLogin = async () => {
-      try {
-        const res = await dispatch(autoLogin(param)).unwrap();
-        console.log(res, "res");
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    startAutoLogin();
-    // const startAutoLogin = async () => {
-    //   try {
-    //     const res = await dispatch(autoLogin(param)).unwrap();
 
-    //     if (res.data.statusCode === 200) {
-    //       setLoginHead(false);
-    //       console.log(res.data.data, "res.data 여기서 유저 불러오기");
-    //       await dispatch(loginInfo(res.data.data));
-    //       console.log("here");
-    //     } else {
-    //       console.log("error");
-    //     }
-    //   } catch (error) {
-    //     //accessToken 만료시
-    //     console.log(param1, "param1");
-    //     const res = await dispatch(setNewAccessToken(param1)).unwrap();
-    //     console.log(res);
-    //     if (res.data.statusCode !== 200) {
-    //       setLoginHead(true);
-    //       // removeCookie("Refresh");
-    //     } else {
-    //       console.log("here");
-    //     }
-    //     console.log("here");
-    //     // removeCookie("Authentication");
-    //   }
-    // };
-    // if (cookies["Refresh"]) {
-    //   startAutoLogin();
-    // }
-  }, []);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "Refresh",
+    "Authentication",
+  ]);
+
+  const startAutoLogin = useCallback(async () => {
+    const param = {
+      refreshToken: cookies["Refresh"],
+    };
+    console.log(param);
+    try {
+      const res = await dispatch(autoLogin(param)).unwrap();
+      console.log(res, "res");
+      if (res.status === 201) {
+        console.log(res, "res");
+        setloginReady(true);
+      } else {
+      }
+    } catch (error) {
+      setloginReady(false);
+      removeCookie("Authentication");
+      removeCookie("Refresh");
+      dispatch(removeLoginInfo());
+    }
+  }, [dispatch, autoLogin]);
+
+  useEffect(() => {
+    startAutoLogin();
+  }, [dispatch, autoLogin, startAutoLogin]);
 
   return (
     <header className="header-wrapper max-w-layout w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white relative">
@@ -130,7 +109,7 @@ export const Header = () => {
       </div>
       <div className="home_login">
         <ul className="logindesktop flex gap-x-4 items-center">
-          {loginHead ? (
+          {loginReady ? (
             <>
               <span className="block overflow-hidden rounded-full w-8 h-8">
                 <img src={userInfo?.profile_img} alt="profile_img" />

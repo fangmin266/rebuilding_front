@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   IHomeCategoryDummy,
   HomeCategoryDummy1,
@@ -16,6 +16,10 @@ import Footer from "../components/Footer";
 import { Header } from "../components/Header";
 import { deliveryStyle, pricePercent, scoreRate } from "../components/Units";
 import { common } from "../../../common/api";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../features/store";
+import { autoLogin } from "../../../features/admin/loginsSignupSlice";
 
 interface SampleType {
   id?: string;
@@ -32,6 +36,11 @@ const Home = () => {
   const [tabName, setTabname] = useState("펀딩/프리오더");
   const [storeNext, setStoreNext] = useState(1);
   const [sample, setSample] = useState<SampleType[]>([]);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "Refresh",
+    "Authentication",
+  ]);
+  const dispatch = useDispatch<AppDispatch>();
 
   const getBooks = async (clicknum: number) => {
     const url = common.baseURL + "product/all";
@@ -53,9 +62,6 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    // getBooks(1);
-  }, []);
   const eventCoupon = () => {
     return (
       <>
