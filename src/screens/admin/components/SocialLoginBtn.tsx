@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { common } from "../../../common/api";
 import { AppDispatch } from "../../../features/store";
@@ -12,10 +12,12 @@ import {
   KAKAO_CLIENT_ID,
   NAVER_CLIENT_ID,
 } from "../../../common/env";
-
+import { toast } from "react-toastify";
+import toastCommonProps from "../../../common/toast";
 const SocialLoginBtn = () => {
   const social = ["구글", "페북"];
   const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
 
   const COMMON_REDIRECT = (social: string) => {
     return `https://localhost/auth/${social}/callback`;
@@ -35,13 +37,21 @@ const SocialLoginBtn = () => {
   };
 
   const getRedirectURI = async (redirect: string) => {
-    const res = await axios.get(redirect);
-    console.log(res);
+    try {
+      const res = await axios.get(redirect);
+      console.log(location.pathname);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleKakaoLogin = async () => {
-    window.location.href = SOCIAL_URL.kakao;
-    getRedirectURI(REDIRECT_URIS.kakao);
+    try {
+      window.location.href = SOCIAL_URL.kakao;
+      await getRedirectURI(REDIRECT_URIS.kakao);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleNaverLogin = async () => {
@@ -58,6 +68,18 @@ const SocialLoginBtn = () => {
     window.location.href = SOCIAL_URL.facebook;
     getRedirectURI(REDIRECT_URIS.facebook);
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const error = searchParams.get("error");
+    if (error) {
+      toast(
+        <p className="whitespace-pre-line">{error}</p>,
+        toastCommonProps("top-right", "toast_alert", 1000)
+      );
+    }
+  }, [getRedirectURI]);
+
   return (
     <>
       <div className="flex flex-col gap-y-3 pt-3 text-white font-bold">

@@ -72,7 +72,7 @@ export const sendEmail = createAsyncThunk(
   //회원가입시 이메일전송하여 랜덤번호 확인
   "sendEmail",
   async (param: EmailState) => {
-    const res = await api.post("auth/sendEmail", param);
+    const res = await api.post("auth/email/randomnum", param);
     return res.data;
   }
 );
@@ -80,7 +80,7 @@ export const sendEmail = createAsyncThunk(
 export const findEmail = createAsyncThunk(
   "findEmail", //이메일 유무 확인
   async (param: EmailState) => {
-    const res = await api.post("auth/findEmail", param);
+    const res = await api.post("auth/email/search", param);
     return res;
   }
 );
@@ -88,7 +88,7 @@ export const findEmail = createAsyncThunk(
 export const sendPasswordResetLink = createAsyncThunk(
   "sendPasswordResetLink", //비밀번호 리셋
   async (param: EmailState) => {
-    const res = await api.post("auth/link/passwordreset", param);
+    const res = await api.post("auth/email/password", param);
     return res;
   }
 );
