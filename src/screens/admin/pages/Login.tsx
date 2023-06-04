@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   LoginState,
-  autoLogin,
   emailLogin,
   emailSignup,
   loginInfo,

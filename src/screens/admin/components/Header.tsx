@@ -72,21 +72,18 @@ export const Header = () => {
   const startAutoLogin = useCallback(async () => {
     const param = {
       refreshToken: cookies["Refresh"],
+      accessToken: cookies["Authentication"],
     };
     console.log(param);
-    try {
-      const res = await dispatch(autoLogin(param)).unwrap();
-      console.log(res, "res");
-      if (res.status === 201) {
-        console.log(res, "res");
-        setloginReady(true);
-      } else {
-      }
-    } catch (error) {
+
+    const res = await dispatch(autoLogin(param)).unwrap();
+    // const resRefresh = await dispatch(autoLoginRefresh(param)).unwrap();
+    if (res.status === 200 || res.status === 201) {
+      setloginReady(true);
+    } else {
       setloginReady(false);
       removeCookie("Authentication");
       removeCookie("Refresh");
-      dispatch(removeLoginInfo());
     }
   }, [dispatch, autoLogin]);
 

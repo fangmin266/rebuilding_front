@@ -19,7 +19,6 @@ import { common } from "../../../common/api";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../features/store";
-import { autoLogin } from "../../../features/admin/loginsSignupSlice";
 
 interface SampleType {
   id?: string;

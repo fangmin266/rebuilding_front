@@ -39,7 +39,7 @@ export interface URLSTATE {
   url: string;
 }
 export interface autoLoginState {
-  // accessToken: string;
+  accessToken: string;
   refreshToken: string;
 }
 
@@ -112,10 +112,51 @@ export const changePassBeforeLogin = createAsyncThunk(
 export const autoLogin = createAsyncThunk(
   "autoLogin",
   async (param: autoLoginState) => {
-    const res = await api.post("auth/autologin", param, {
+    const response = await axios.post("auth/autologin", {
       baseURL: common.baseURL,
       withCredentials: true, // 쿠키 받아오기 위한 옵션
+      headers: {
+        Authorization: `Bearer ${param.accessToken}`,
+        refresh: param.refreshToken,
+      },
     });
+    console.log(response, "res?");
+    return response;
+  }
+);
+
+export const autoLoginAccess = createAsyncThunk(
+  "autoLogin",
+  async ({ accessToken, refreshToken }: autoLoginState) => {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      refresh: refreshToken,
+    };
+
+    const res = await api.post("auth/autologin/access", {
+      baseURL: common.baseURL,
+      withCredentials: true,
+      headers, // 헤더에 accessToken과 refreshToken을 포함
+    });
+
+    console.log(res, "res?");
+    return res;
+  }
+);
+export const autoLoginRefresh = createAsyncThunk(
+  "autoLogin",
+  async ({ accessToken, refreshToken }: autoLoginState) => {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      refresh: refreshToken,
+    };
+
+    const res = await api.post("auth/autologin/refresh", {
+      baseURL: common.baseURL,
+      withCredentials: true,
+      headers, // 헤더에 accessToken과 refreshToken을 포함
+    });
+
     console.log(res, "res?");
     return res;
   }
