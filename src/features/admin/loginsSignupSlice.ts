@@ -7,11 +7,13 @@ interface CommonState {
   i: number;
   status: null | string;
   userInfo: null | any;
+  loginReady: boolean;
 }
 const initialState: CommonState = {
   i: 0,
   status: null,
   userInfo: null,
+  loginReady: false,
 };
 
 interface SignupState {
@@ -120,7 +122,6 @@ export const autoLogin = createAsyncThunk(
         refresh: param.refreshToken,
       },
     });
-    console.log(response, "res?");
     return response;
   }
 );
@@ -184,6 +185,9 @@ const loginsSignupSlice = createSlice({
       //사용자정보삭제 로컬스토리지 (미해결)
       state.userInfo = {};
     },
+    setLoginReady: (state, action: PayloadAction<any>) => {
+      state.loginReady = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -194,6 +198,7 @@ const loginsSignupSlice = createSlice({
   },
 });
 
-export const { loginInfo, removeLoginInfo } = loginsSignupSlice.actions;
+export const { loginInfo, removeLoginInfo, setLoginReady } =
+  loginsSignupSlice.actions;
 
 export default loginsSignupSlice.reducer;

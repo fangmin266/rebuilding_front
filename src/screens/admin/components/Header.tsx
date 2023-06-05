@@ -9,11 +9,11 @@ import { AppDispatch } from "../../../features/store";
 import {
   autoLogin,
   loginInfo,
-  removeLoginInfo,
-  setNewAccessToken,
+  setLoginReady,
 } from "../../../features/admin/loginsSignupSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
+import { getUserInfo } from "../../../features/admin/userSlice";
 export interface Link {
   name: string;
   link: string;
@@ -58,12 +58,12 @@ export const Logo = () => {
 export const Header = () => {
   const [madeModal, setMadeModal] = useState(false);
 
-  const [loginReady, setloginReady] = useState(false);
+  // const [loginReady, setloginReady] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const { userInfo } = useSelector(
+  const { userInfo, loginReady } = useSelector(
     (state: RootState) => state.adminloginAndsignup
   );
-
+  console.log(userInfo, "userInfo");
   const [cookies, setCookie, removeCookie] = useCookies([
     "Refresh",
     "Authentication",
@@ -74,14 +74,23 @@ export const Header = () => {
       refreshToken: cookies["Refresh"],
       accessToken: cookies["Authentication"],
     };
-    console.log(param);
-
-    const res = await dispatch(autoLogin(param)).unwrap();
-    // const resRefresh = await dispatch(autoLoginRefresh(param)).unwrap();
-    if (res.status === 200 || res.status === 201) {
-      setloginReady(true);
-    } else {
-      setloginReady(false);
+    try {
+      const res = await dispatch(autoLogin(param)).unwrap();
+      console.log(res, "res");
+      if (res.status === 200) {
+        dispatch(setLoginReady(true));
+        dispatch(
+          getUserInfo({
+            userId: res.data.user.userId,
+            accessToken: param.accessToken,
+            refreshToken: param.refreshToken,
+          })
+        );
+      } else {
+        console.log(res.data);
+      }
+    } catch (error) {
+      dispatch(setLoginReady(false));
       removeCookie("Authentication");
       removeCookie("Refresh");
     }
@@ -89,7 +98,7 @@ export const Header = () => {
 
   useEffect(() => {
     startAutoLogin();
-  }, [dispatch, autoLogin, startAutoLogin]);
+  }, [dispatch, startAutoLogin]);
 
   return (
     <header className="header-wrapper max-w-layout w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white relative">
