@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import {
-  LoginState,
-  emailLogin,
-  emailSignup,
-  loginInfo,
-} from "../../../features/admin/loginsSignupSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { loginInfo } from "../../../features/admin/loginsSignupSlice";
 import { AppDispatch } from "../../../features/store";
 import { ButtonDefault } from "../components/Button";
 import { Header2 } from "../components/Header";
@@ -26,7 +21,8 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
   //useDispatch만 사용할 경우 이슈발생 => useDispatch 훅 AppDispatch는 dispatch, thunkdispatch 포함
   const [cookies, setCookie, removeCookie] = useCookies([
     "Refresh",

@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { common } from "../../../common/api";
 import { AppDispatch } from "../../../features/store";
 import { ButtonDefault } from "./Button";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import {
   FACEBOOK_CLIENT_ID,
@@ -14,11 +14,13 @@ import {
 } from "../../../common/env";
 import { toast } from "react-toastify";
 import toastCommonProps from "../../../common/toast";
+
 const SocialLoginBtn = () => {
   const social = ["구글", "페북"];
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-
+  //const isRedirectedRef = useRef(false); // 리디렉션 여부를 기록하기 위한 Ref
+  const navigate = useNavigate();
   const COMMON_REDIRECT = (social: string) => {
     return `https://localhost/auth/${social}/callback`;
   };
@@ -38,6 +40,7 @@ const SocialLoginBtn = () => {
 
   const getRedirectURI = async (redirect: string) => {
     try {
+      //isRedirectedRef.current = true; // 리디렉션 될 예정임을 표시
       const res = await axios.get(redirect);
       console.log(location.pathname);
     } catch (error) {
@@ -72,13 +75,16 @@ const SocialLoginBtn = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const error = searchParams.get("error");
+
     if (error) {
       toast(
         <p className="whitespace-pre-line">{error}</p>,
         toastCommonProps("top-right", "toast_alert", 1000)
       );
+    } else {
+      navigate("/login");
     }
-  }, [getRedirectURI]);
+  }, [handleKakaoLogin, handleNaverLogin]);
 
   return (
     <>

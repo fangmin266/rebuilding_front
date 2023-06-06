@@ -3,17 +3,11 @@ import { useNavigate } from "react-router-dom";
 import ProjectMadeModal from "../pages/components/Home/ProjectMadeModal";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
-import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../features/store";
-import {
-  autoLogin,
-  loginInfo,
-  setLoginReady,
-} from "../../../features/admin/loginsSignupSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
-import { getUserInfo } from "../../../features/admin/userSlice";
+
 export interface Link {
   name: string;
   link: string;
@@ -57,48 +51,10 @@ export const Logo = () => {
 };
 export const Header = () => {
   const [madeModal, setMadeModal] = useState(false);
-
-  // const [loginReady, setloginReady] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { userInfo, loginReady } = useSelector(
     (state: RootState) => state.adminloginAndsignup
   );
-  console.log(userInfo, "userInfo");
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "Refresh",
-    "Authentication",
-  ]);
-
-  const startAutoLogin = useCallback(async () => {
-    const param = {
-      refreshToken: cookies["Refresh"],
-      accessToken: cookies["Authentication"],
-    };
-    try {
-      const res = await dispatch(autoLogin(param)).unwrap();
-      console.log(res, "res");
-      if (res.status === 200) {
-        dispatch(setLoginReady(true));
-        dispatch(
-          getUserInfo({
-            userId: res.data.user.userId,
-            accessToken: param.accessToken,
-            refreshToken: param.refreshToken,
-          })
-        );
-      } else {
-        console.log(res.data);
-      }
-    } catch (error) {
-      dispatch(setLoginReady(false));
-      removeCookie("Authentication");
-      removeCookie("Refresh");
-    }
-  }, [dispatch, autoLogin]);
-
-  useEffect(() => {
-    startAutoLogin();
-  }, [dispatch, startAutoLogin]);
 
   return (
     <header className="header-wrapper max-w-layout w-full flex items-center mx-auto 2xl:w-100 px-20 py-2 justify-between bg-white relative">

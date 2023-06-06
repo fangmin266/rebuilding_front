@@ -1,15 +1,13 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from "react";
+import useStartAutoLogin from "../hooks/useStartAutoLogin";
 
 interface LayoutProps {
-    children: ReactNode
+  children: ReactNode;
 }
-const Layout = ({children}:LayoutProps) => {
-  return (
-    <main className="flex flex-col h-screen antialiased">
-        {children}
-    </main>
-  )
-}
+const Layout = ({ children }: LayoutProps) => {
+  useStartAutoLogin();
 
-export default Layout
+  return <main className="flex flex-col h-screen antialiased">{children}</main>;
+};
 
+export default Layout;

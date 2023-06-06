@@ -26,8 +26,7 @@ export const getUserInfo = createAsyncThunk(
   //일반 회원가입
   "emailSignup",
   async (params: UserIdState) => {
-    console.log(params, "params");
-    if (params.accessToken) {
+    if (params.accessToken && params.userId) {
       const headers = {
         Authorization: `Bearer ${params.accessToken}`,
         refresh: params.refreshToken,
@@ -37,7 +36,7 @@ export const getUserInfo = createAsyncThunk(
         withCredentials: true,
         headers, // 헤더에 accessToken과 refreshToken을 포함
       });
-      console.log(res, "res");
+
       return res.data;
     }
   }
