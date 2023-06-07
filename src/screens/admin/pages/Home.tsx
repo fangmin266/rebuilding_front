@@ -19,35 +19,25 @@ import { common } from "../../../common/api";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../features/store";
+import { ProductState } from "../../../features/admin/productSlice";
+import { getAllProduct } from "../../../features/admin/productSlice";
 
-interface SampleType {
-  id?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  bookname: string;
-  libraryname: string;
-  writer: string;
-  publisher: string;
-}
 const Home = () => {
   const [event, setEvent] = useState(true);
   const [aiNum, setAiNum] = useState<number>(1);
   const [tabName, setTabname] = useState("펀딩/프리오더");
   const [storeNext, setStoreNext] = useState(1);
-  const [sample, setSample] = useState<SampleType[]>([]);
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "Refresh",
-    "Authentication",
-  ]);
+  const [sample, setSample] = useState<ProductState[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const getBooks = async (clicknum: number) => {
-    const url = common.baseURL + "product/all";
     try {
-      const { data, status } = await axios.get<SampleType[]>(url);
-      console.log(data, status);
-      if (status === 200) {
-        console.log(data, status);
+      const res = await dispatch(getAllProduct()).unwrap();
+      console.log(res, "res");
+      const resData = res.data;
+      const data = resData.data;
+      if (resData.statusCode === 200) {
         if (clicknum === 1) {
           setSample(data?.slice(0, 4));
         } else if (clicknum === 2) {
@@ -82,14 +72,16 @@ const Home = () => {
     );
   };
 
-  const categorySection = (heresample: SampleType[]) => {
+  const categorySection = (heresample: ProductState[]) => {
     return (
       <>
         {heresample?.map((el, idx) => (
           <li className="pt-4" key={idx}>
-            <div className="h-[100px] bg-gray-100 rounded"></div>
-            <div>{el.libraryname}</div>
-            <div className="pt-2 ">{el.bookname}</div>
+            <div className="h-[100px] overflow-hidden bg-gray-100 rounded">
+              <img src={el.thumbnail} alt={el.title} />
+            </div>
+            <div>{el.title}111</div>
+            <div className="pt-2 ">{el.content}</div>
             <div className="flex items-center gap-x-1">
               {/* <span className='text-primary_100'>{el.count?el.count?.toLocaleString('ko-KR'):el.percentage?.toLocaleString('ko-KR')}{el.unit}</span> */}
               {/* <span className='text-gray-400 text-xs'>{el.createdAt}</span> */}
@@ -218,6 +210,9 @@ const Home = () => {
       </div>
     );
   };
+  useEffect(() => {
+    getBooks(1);
+  }, []);
   return (
     <>
       {eventCoupon()}
