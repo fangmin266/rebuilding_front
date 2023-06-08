@@ -11,6 +11,7 @@ import Intro from "./screens/admin/pages/studio/Intro";
 import IntroFunding from "./screens/admin/pages/studio/IntroFunding";
 import ResetPassword from "./screens/admin/pages/ResetPassword";
 import { CookiesProvider } from "react-cookie";
+import IntroPlan from "./screens/admin/pages/studio/IntroPlan";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ function App() {
             {/* studio */}
             <Route path="/studio/intro" element={<Intro />} />
             <Route path="/studio/intro/funding" element={<IntroFunding />} />
+            <Route path="/studio/intro/funding/plan" element={<IntroPlan />} />
             {/* 비밀번호 찾기 */}
             <Route
               path="/web/account/resetpassword"

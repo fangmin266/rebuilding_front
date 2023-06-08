@@ -6,8 +6,13 @@ import { Head4_4xl } from "../../components/HeadTitle";
 import { IntroLoadingBar } from "../../components/LoadingBar";
 import { ProjectIntroSteps } from "../../staticLists/ProjectIntro";
 import { AsideHead } from "./AsideHead";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../features/store";
 const Intro = () => {
   const navigate = useNavigate();
+  const { userInfo, loginReady } = useSelector(
+    (state: RootState) => state.adminloginAndsignup
+  );
 
   const sayHello = [
     "프로젝트 개설을 축하드려요.",
@@ -23,7 +28,7 @@ const Intro = () => {
   const Intro0 = () => {
     return (
       <>
-        <Head4_4xl title={"mj 님, 반갑습니다!"} />
+        <Head4_4xl title={`${userInfo.username} 님, 반갑습니다!`} />
         <ul className="flex flex-col gap-y-1 pt-6">
           {sayHello?.map((el, idx) => (
             <li

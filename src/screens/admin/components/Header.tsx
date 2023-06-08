@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ProjectMadeModal from "../pages/components/Home/ProjectMadeModal";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
@@ -107,12 +107,19 @@ export const Header2 = () => {
 };
 
 export const StudioHeader = () => {
-  const arrs = ["min", "maker studio"];
+  const tags = ["min", "maker studio"];
+  const rightbtns = ["미리보기", "임시저장"];
+  const rightbtn = ["미리보기"];
   const navigate = useNavigate();
+  const path = useLocation().pathname;
+  const { userInfo, loginReady } = useSelector(
+    (state: RootState) => state.adminloginAndsignup
+  );
+  console.log(userInfo);
   return (
     <header className=" px-6 py-3 flex justify-between items-center border border-b">
       <div className="">
-        {arrs?.map((el) => (
+        {tags?.map((el) => (
           <span
             key={el}
             className="inline-block mr-2 bg-black rounded-full py-1 px-2 text-white text-xs font-bold"
@@ -122,10 +129,28 @@ export const StudioHeader = () => {
         ))}
       </div>
       <div className="flex gap-x-2 items-center">
-        <span className="bg-gray-100 p-2 rounded-full inline-block">img</span>
-        <span>name</span>
+        <img
+          src={userInfo.profile_img}
+          alt="profileimage"
+          className="rounded-full w-10 h-10"
+        />
+        <span>{userInfo.username}</span>
       </div>
       <div className="flex items-center gap-x-6 cursor-pointer">
+        <ul className="flex gap-x-2">
+          {(path.includes("plan") ? rightbtns : rightbtn)?.map((el, idx) => (
+            <li
+              className={
+                "rounded-full px-4 py-2 text-sm font-bold " +
+                (idx === 0
+                  ? " text-primary_100 border border-primary_100 "
+                  : " text-white bg-primary_100 ")
+              }
+            >
+              {el}
+            </li>
+          ))}
+        </ul>
         <span className="block" onClick={() => navigate("/")}>
           <NotificationsIcon fontSize="small" />
         </span>

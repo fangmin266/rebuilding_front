@@ -1,10 +1,5 @@
-import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  IHomeCategoryDummy,
-  HomeCategoryDummy1,
-  HomeCategoryDummy2,
-  HomeCategoryDummy3,
   HomeRealTimeDummy1,
   HomeRealTimeDummy2,
   HomeStoreRecommendDummy1,
@@ -15,8 +10,6 @@ import Footer from "../components/Footer";
 
 import { Header } from "../components/Header";
 import { deliveryStyle, pricePercent, scoreRate } from "../components/Units";
-import { common } from "../../../common/api";
-import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../features/store";
 import { ProductState } from "../../../features/admin/productSlice";
@@ -27,23 +20,42 @@ const Home = () => {
   const [aiNum, setAiNum] = useState<number>(1);
   const [tabName, setTabname] = useState("펀딩/프리오더");
   const [storeNext, setStoreNext] = useState(1);
-  const [sample, setSample] = useState<ProductState[]>([]);
+  const [aiProduct, setAIproduct] = useState<ProductState[]>([]);
+  const [ranking, setRanking] = useState<ProductState[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const getBooks = async (clicknum: number) => {
     try {
       const res = await dispatch(getAllProduct()).unwrap();
-      console.log(res, "res");
       const resData = res.data;
       const data = resData.data;
       if (resData.statusCode === 200) {
         if (clicknum === 1) {
-          setSample(data?.slice(0, 4));
+          setAIproduct(data?.slice(0, 4));
         } else if (clicknum === 2) {
-          setSample(data?.slice(4, 8));
+          setAIproduct(data?.slice(4, 8));
         } else {
-          setSample(data?.slice(8, 12));
+          setAIproduct(data?.slice(8, 12));
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRanking = async (clicknum: number) => {
+    try {
+      const res = await dispatch(getAllProduct()).unwrap();
+      const resData = res.data;
+      const data = resData.data;
+      if (resData.statusCode === 200) {
+        if (clicknum === 1) {
+          setRanking(data?.slice(0, 5));
+        } else if (clicknum === 2) {
+          setRanking(data?.slice(5, 10));
+        } else {
+          setRanking(data?.slice(10, 15));
         }
       }
     } catch (error) {
@@ -137,6 +149,11 @@ const Home = () => {
             className={tabName === el ? "text-black border-b border-black" : ""}
             onClick={() => {
               setTabname(el);
+              if (el === "펀딩/프리오더") {
+                getRanking(1);
+              } else {
+                getRanking(2);
+              }
             }}
           >
             {el}
@@ -212,6 +229,7 @@ const Home = () => {
   };
   useEffect(() => {
     getBooks(1);
+    getRanking(1);
   }, []);
   return (
     <>
@@ -230,7 +248,7 @@ const Home = () => {
             />
             <ul className="grid grid-cols-3 gap-x-8">
               {categorySection(
-                aiNum === 1 ? sample : aiNum === 2 ? sample : sample
+                aiNum === 1 ? aiProduct : aiNum === 2 ? aiProduct : aiProduct
               )}
               {specialExhibition()}
             </ul>
